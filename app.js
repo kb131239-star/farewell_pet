@@ -196,14 +196,14 @@
     $('#review-record').onclick=()=>{$('#detail').close();recordModal(p.name);};
     const call=$('#call');
     if(p.phone){call.href='tel:'+p.phone;call.removeAttribute('aria-disabled');call.title='';call.classList.remove('disabled');}
-    else{call.removeAttribute('href');call.setAttribute('aria-disabled','true');call.classList.add('disabled');call.title='예시 업체라 전화할 수 없어요';}
+    else{call.removeAttribute('href');call.setAttribute('aria-disabled','true');call.classList.add('disabled');call.title=p.example?'예시 업체라 전화할 수 없어요':'전화번호 확인 전이에요';}
     heartState();
     if(!$('#detail').open)$('#detail').showModal();
     $('#detail-body').scrollTop=0;
   }
   function heartState(){const on=detailPlace&&state.saved.includes(detailPlace.id);$('#detail-heart').setAttribute('aria-pressed',on);$('#detail-heart').setAttribute('aria-label',on?'찜 해제':'찜하기');}
   $('#detail-heart').addEventListener('click',()=>toggleSave(detailPlace.id));
-  $('#call').addEventListener('click',e=>{if($('#call').classList.contains('disabled')){e.preventDefault();toast('예시 업체라 전화 연결은 할 수 없어요.');}});
+  $('#call').addEventListener('click',e=>{if($('#call').classList.contains('disabled')){e.preventDefault();toast(detailPlace&&detailPlace.example?'예시 업체라 전화 연결은 할 수 없어요.':'전화번호를 아직 확인하지 못했어요. 아래 출처 링크로 문의해 주세요.');}});
   $('#ask').addEventListener('click',()=>inquiry(detailPlace));
 
   /* ---------- 문의 · 기록 · 준비 중 (공용 시트) ---------- */

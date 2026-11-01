@@ -12,14 +12,10 @@
      sizes:{소형견:T,중형견:T,대형견:T},
      attrs:{'24시간 상주':T,'개별 객실':T,'장기 호텔링':T,'데이케어':F,'산책':T,'목욕':undefined,'병원 연계':undefined,'유료픽업':F,'무료픽업':T,'미끄럼 방지 매트':T,'실내 놀이터':F,'실외 놀이터':T,'마당':T,'테라스':F,'루프탑':F,'수영장':F,'수의사':F,'수의테크니션':undefined,'훈련사':F,'반려동물 관리사':T,'주차장':T,'반려동물 용품 판매':T,'애견카페':F,'투약 지원':undefined,'단독 돌봄':T,'야간 관리':T},
      prices:[['호텔',[['1~5kg','33,000원'],['6~12kg','38,000원'],['13kg 이상','45,000원']]],['기타',[['장기위탁 (1~5kg, 월)','300,000원'],['장기위탁 (6~12kg, 월)','350,000원']]]]},
-    {id:'ex-care-1',name:'마당있는 돌봄집',cat:'care',kinds:['hotel','kinder'],region:'나주시',dist:4,address:'예시 주소 · 나주시 남평읍',hours:'월-토 08:00 - 20:00 (예시)',
+    {id:'ex-care-1',name:'마당있는 돌봄집',cat:'care',kinds:['hotel'],region:'나주시',dist:4,address:'예시 주소 · 나주시 남평읍',hours:'월-토 08:00 - 20:00 (예시)',
      sizes:{소형견:T,중형견:T,대형견:undefined},
      attrs:{'24시간 상주':T,'개별 객실':F,'장기 호텔링':F,'데이케어':T,'산책':T,'목욕':F,'병원 연계':F,'유료픽업':T,'무료픽업':F,'사회화 교육':T,'행동 교정':F,'미끄럼 방지 매트':undefined,'실내 놀이터':F,'실외 놀이터':T,'마당':T,'테라스':F,'루프탑':F,'수영장':F,'훈련사':F,'유치원 교사':F,'반려동물 관리사':T,'주차장':T,'반려동물 용품 판매':F,'애견카페':F,'투약 지원':T,'단독 돌봄':F,'야간 관리':T},
-     prices:[['가정 돌봄',[['1박 (소형·중형)','28,000원']]],['데이케어',[['종일','18,000원']]]]},
-    {id:'ex-kinder-1',name:'소풍 유치원',cat:'kindergarten',kinds:['kinder'],region:'나주시',dist:2,address:'예시 주소 · 나주시 빛가람동',hours:'월-금 08:30 - 19:30 (예시)',
-     sizes:{소형견:T,중형견:T,대형견:F},
-     attrs:{'데이케어':T,'산책':T,'목욕':T,'사회화 교육':T,'행동 교정':undefined,'유료픽업':T,'무료픽업':F,'미끄럼 방지 매트':T,'실내 놀이터':T,'실외 놀이터':F,'마당':F,'테라스':T,'루프탑':T,'수영장':F,'훈련사':T,'유치원 교사':T,'반려동물 관리사':T,'주차장':F,'반려동물 용품 판매':T,'애견카페':T,'투약 지원':undefined,'단독 돌봄':F},
-     prices:[['유치원',[['1~5kg 시간권','4,000원'],['1~5kg 종일권','20,000원'],['1~5kg 주3회권 (월)','160,000원'],['1~5kg 월권','210,000원']]],['기타',[['픽드랍 편도','3,000원'],['픽드랍 왕복','6,000원']]]]}
+     prices:[['가정 돌봄',[['1박 (소형·중형)','28,000원']]],['데이케어',[['종일','18,000원']]]]}
   ].map(p=>({...p,example:true}));
 
 
@@ -47,6 +43,35 @@
      sizes:{},
      attrs:{'반려동물 용품 판매':true},
      source:'https://share.google/cyQYIFFHyFf9Yn44I',sourceLabel:'Google 비즈니스 프로필',checked:'2026.11.01',prices:null}
+  ];
+
+
+  /* 유치원: 업체 인스타그램·Google 비즈니스 프로필·지역 프로필(당근)에서 확인한 정보 (2026.11.01 확인) */
+  const kindergartens=[
+    {id:'kinder-paradise',name:'견상낙원',cat:'kindergarten',kinds:['kinder','hotel'],region:'나주시',dist:2,
+     address:'전라남도 나주시 빛가람로 689, 가온빌딩 801호 (빛가람동)',phone:'010-8534-3684',
+     hours:'월-토 09:00 - 23:00 · 일 09:00 - 19:00',
+     description:'애견유치원과 호텔, 장기위탁을 함께 운영한다고 소개하는 곳이에요. 픽업도 한다고 안내하지만 요금과 범위는 업체에 확인해 주세요.',
+     sizes:{},attrs:{'데이케어':true,'장기 호텔링':true},
+     source:'https://www.instagram.com/dogparadise92/',sourceLabel:'견상낙원 인스타그램',checked:'2026.11.01',prices:null},
+    {id:'kinder-nunbotti',name:'눈보뛰프리미엄',cat:'kindergarten',kinds:['kinder','hotel'],region:'나주시',dist:2,
+     address:'전라남도 나주시 빛가람동 348-20, LS타워 201호',phone:'062-941-5880',
+     hours:'08:00 영업 시작 (마감 시간은 업체에 확인해 주세요)',
+     description:'10kg 안팎의 반려견을 대상으로 하는 유치원이라고 소개해요. 수중 트레드밀, 펫 피트니스, 전용 목욕 장비를 갖췄고, 원생을 위한 호텔도 운영한다고 안내해요.',
+     sizes:{소형견:true,대형견:false},attrs:{'데이케어':true,'산책':true,'목욕':true,'사회화 교육':true},
+     source:'https://www.instagram.com/premium_dogcare/',sourceLabel:'눈보뛰프리미엄 인스타그램',checked:'2026.11.01',prices:null},
+    {id:'kinder-castle',name:'멍캐슬',cat:'kindergarten',kinds:['kinder','hotel','grooming'],region:'나주시',dist:2,
+     address:'전라남도 나주시 빛가람로 740, 한빛타워 4층 403·404호 (빛가람동)',phone:'061-930-7347',
+     hours:'08:00 영업 시작 (마감 시간은 업체에 확인해 주세요)',
+     description:'유치원·호텔·카페·미용을 한곳에서 운영하는 반려견 케어 센터예요. 200평 규모 실내 공간과 별도 야외 운동장이 있다고 소개해요.',
+     sizes:{},attrs:{'데이케어':true,'목욕':true,'실내 놀이터':true,'실외 놀이터':true,'애견카페':true},
+     source:'https://www.instagram.com/meongcastle/',sourceLabel:'멍캐슬 인스타그램',checked:'2026.11.01',prices:null},
+    {id:'kinder-dabang',name:'멍다방',cat:'kindergarten',kinds:['kinder','hotel'],region:'나주시',dist:2,
+     address:'전라남도 나주시 배멧1길 46, 302호 (빛가람동)',phone:null,
+     hours:'09:30 - 19:00 · 수요일 휴무',
+     description:'애견카페와 유치원, 호텔을 함께 운영하는 곳이에요. 방문 후기에 따르면 주차 공간이 넉넉하다고 해요. 전화번호는 아직 확인하지 못해서, 인스타그램 메시지로 문의해 주세요.',
+     sizes:{},attrs:{'데이케어':true,'애견카페':true,'주차장':true},
+     source:'https://www.instagram.com/mungdabang/',sourceLabel:'멍다방 인스타그램',checked:'2026.11.01',prices:null}
   ];
 
   const hospitalPlaces=(typeof hospitals!=='undefined'?hospitals:[]).map((h,i)=>({
@@ -81,7 +106,7 @@
     together:{title:'보호자와 함께 공간',kind:'together',body:'애견카페, 동반 식당, 반려견 놀이터처럼 보호자와 함께 머물 수 있는 곳을 모으고 있어요.',note:'공간마다 체급 제한과 입장 조건이 달라서, 확인된 정보부터 차례로 열어 둘게요.'},
     star:{title:'별들의 공간',kind:'star',body:'무지개다리를 건넌 아이를 기억하는 공간이에요. 장례와 추모에 필요한 정보를 조심스럽게 준비하고 있어요.',note:'준비가 끝나면 이 산책로 끝에서 만날 수 있어요.'}
   };
-  window.PLACES=[...hospitalPlaces,...grooming,...examples];
+  window.PLACES=[...hospitalPlaces,...kindergartens,...grooming,...examples];
   window.FILTERS=FILTERS;
   window.SOON=SOON;
   window.FACILITY_ICONS={'미끄럼 방지 매트':'grid','실내 놀이터':'slide','실외 놀이터':'slide','마당':'tree','테라스':'umbrella','루프탑':'building','수영장':'waves','주차장':'parking','반려동물 용품 판매':'bag','애견카페':'cup'};
