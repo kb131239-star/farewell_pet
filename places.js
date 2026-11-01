@@ -19,16 +19,35 @@
     {id:'ex-kinder-1',name:'소풍 유치원',cat:'kindergarten',kinds:['kinder'],region:'나주시',dist:2,address:'예시 주소 · 나주시 빛가람동',hours:'월-금 08:30 - 19:30 (예시)',
      sizes:{소형견:T,중형견:T,대형견:F},
      attrs:{'데이케어':T,'산책':T,'목욕':T,'사회화 교육':T,'행동 교정':undefined,'유료픽업':T,'무료픽업':F,'미끄럼 방지 매트':T,'실내 놀이터':T,'실외 놀이터':F,'마당':F,'테라스':T,'루프탑':T,'수영장':F,'훈련사':T,'유치원 교사':T,'반려동물 관리사':T,'주차장':F,'반려동물 용품 판매':T,'애견카페':T,'투약 지원':undefined,'단독 돌봄':F},
-     prices:[['유치원',[['1~5kg 시간권','4,000원'],['1~5kg 종일권','20,000원'],['1~5kg 주3회권 (월)','160,000원'],['1~5kg 월권','210,000원']]],['기타',[['픽드랍 편도','3,000원'],['픽드랍 왕복','6,000원']]]]},
-    {id:'ex-groom-1',name:'포근 미용실',cat:'grooming',kinds:['grooming'],region:'나주시',dist:1,address:'예시 주소 · 나주시 빛가람동',hours:'화-일 10:00 - 19:00 (예시)',
-     sizes:{소형견:T,중형견:T,대형견:F},
-     attrs:{'특수견 미용':F,'피어프리':T,'스파':T,'목욕':T,'노령견 미용':T,'유료픽업':F,'무료픽업':F,'미용사':T,'주차장':T,'반려동물 용품 판매':T,'애견카페':F},
-     prices:[['미용',[['목욕 (1~5kg)','25,000원'],['전체 미용 (1~5kg)','45,000원'],['전체 미용 (6~12kg)','60,000원']]]]},
-    {id:'ex-groom-2',name:'결 그루밍',cat:'grooming',kinds:['grooming'],region:'나주시',dist:3,address:'예시 주소 · 나주시 송월동',hours:'매일 11:00 - 20:00 (예시)',
-     sizes:{소형견:T,중형견:T,대형견:T},
-     attrs:{'특수견 미용':T,'피어프리':undefined,'스파':F,'목욕':T,'노령견 미용':undefined,'유료픽업':T,'무료픽업':F,'미용사':T,'주차장':F,'반려동물 용품 판매':F,'애견카페':T},
-     prices:[['미용',[['목욕 (1~12kg)','30,000원'],['스포팅 (13kg 이상)','80,000원']]]]}
+     prices:[['유치원',[['1~5kg 시간권','4,000원'],['1~5kg 종일권','20,000원'],['1~5kg 주3회권 (월)','160,000원'],['1~5kg 월권','210,000원']]],['기타',[['픽드랍 편도','3,000원'],['픽드랍 왕복','6,000원']]]]}
   ].map(p=>({...p,example:true}));
+
+
+  /* 미용실: 보호자가 공유한 Google 비즈니스 프로필과 업체 SNS·지역 프로필에서 확인한 정보 (2026.11.01 확인).
+     확인되지 않은 조건은 비워 두어 '확인 필요'로 보이게 한다. */
+  const grooming=[
+    {id:'groom-barberpet',name:'바버펫',cat:'grooming',kinds:['grooming'],region:'나주시',dist:2,
+     address:'전라남도 나주시 교육길 13, 스마트파크 지식산업센터 E동 1-110호 (빛가람동)',phone:'010-3316-2882',
+     hours:'10:00 - 18:00 (휴무일은 업체에 확인해 주세요)',
+     description:'하이바·귀툭튀 같은 가위컷과 대형견 미용을 한다고 소개하는 빛가람동 미용실이에요. 아이들이 스트레스 받지 않는 미용을 추구한다고 밝히고 있어요.',
+     sizes:{대형견:true},
+     attrs:{'가위컷':true,'목욕':true},
+     source:'https://www.instagram.com/barberpet_naju/',sourceLabel:'바버펫 인스타그램',checked:'2026.11.01',prices:null},
+    {id:'groom-rosemary',name:'로즈메리펫뷰티샵',cat:'grooming',kinds:['grooming','hotel'],region:'나주시',dist:2,
+     address:'전라남도 나주시 상야4길 10, 패션페이스 1층 122호 (빛가람동)',phone:'010-5878-6082',
+     hours:'10:00 - 19:00 · 일요일 휴무',
+     description:'완벽한 미용보다 안전하고 스트레스 없는 미용을 추구한다고 소개하는 미용실이에요. 스파·팩 서비스를 하고, 애견호텔과 옷·사료 같은 용품 판매도 함께 운영해요.',
+     sizes:{},
+     attrs:{'스파':true,'목욕':true,'반려동물 용품 판매':true,'주차장':true},
+     source:'https://share.google/EIJ6qS6QGWbP2bP1q',sourceLabel:'Google 비즈니스 프로필',checked:'2026.11.01',prices:null},
+    {id:'groom-puppyholic',name:'퍼피홀릭',cat:'grooming',kinds:['grooming'],region:'나주시',dist:4,
+     address:'전라남도 나주시 남내1길 10 (남내동)',phone:'061-333-0706',
+     hours:'월-토 09:30 - 19:30 · 일요일 휴무',
+     description:'나주 원도심 남내동에서 반려견 미용과 용품 판매를 함께 하는 곳이에요.',
+     sizes:{},
+     attrs:{'반려동물 용품 판매':true},
+     source:'https://share.google/cyQYIFFHyFf9Yn44I',sourceLabel:'Google 비즈니스 프로필',checked:'2026.11.01',prices:null}
+  ];
 
   const hospitalPlaces=(typeof hospitals!=='undefined'?hospitals:[]).map((h,i)=>({
     id:'hosp-'+i,name:h.name,cat:'hospital',kinds:['hospital'],region:'나주시',dist:2,address:h.address,phone:h.phone,image:h.image,description:h.description,source:h.source,sourceLabel:h.sourceLabel,checked:'2026.10.18',
@@ -51,7 +70,7 @@
       {title:'편의시설',opts:['주차장','반려동물 용품 판매','애견카페']}]},
     grooming:{title:'미용',needs:[],groups:[
       sizeGroup('미용 가능 체급'),
-      {title:'주요 서비스',opts:['특수견 미용','피어프리','스파','목욕','노령견 미용','유료픽업','무료픽업'],grid:3},
+      {title:'주요 서비스',opts:['가위컷','특수견 미용','스파','목욕','노령견 미용','피어프리','유료픽업','무료픽업'],grid:3},
       {title:'편의시설',opts:['주차장','반려동물 용품 판매','애견카페']}]},
     hospital:{title:'동물병원',needs:['노령견 진료'],groups:[
       {title:'진료',opts:['야간·응급 진료','외과·수술','피부·귀','치과','건강검진','예방접종']},
@@ -62,7 +81,7 @@
     together:{title:'보호자와 함께 공간',kind:'together',body:'애견카페, 동반 식당, 반려견 놀이터처럼 보호자와 함께 머물 수 있는 곳을 모으고 있어요.',note:'공간마다 체급 제한과 입장 조건이 달라서, 확인된 정보부터 차례로 열어 둘게요.'},
     star:{title:'별들의 공간',kind:'star',body:'무지개다리를 건넌 아이를 기억하는 공간이에요. 장례와 추모에 필요한 정보를 조심스럽게 준비하고 있어요.',note:'준비가 끝나면 이 산책로 끝에서 만날 수 있어요.'}
   };
-  window.PLACES=[...hospitalPlaces,...examples];
+  window.PLACES=[...hospitalPlaces,...grooming,...examples];
   window.FILTERS=FILTERS;
   window.SOON=SOON;
   window.FACILITY_ICONS={'미끄럼 방지 매트':'grid','실내 놀이터':'slide','실외 놀이터':'slide','마당':'tree','테라스':'umbrella','루프탑':'building','수영장':'waves','주차장':'parking','반려동물 용품 판매':'bag','애견카페':'cup'};
