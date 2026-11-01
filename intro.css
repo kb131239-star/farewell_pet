@@ -1,0 +1,33 @@
+body.intro{min-height:100dvh;display:flex;flex-direction:column;background:radial-gradient(120% 80% at 50% 58%,#F4F8EC 0%,var(--meadow) 55%,#E2ECCF 100%)}
+.login{font-size:14px;font-weight:600;color:var(--ink-2);text-decoration:none;padding:10px 4px;border-bottom:1.5px solid var(--line-2)}
+.login:hover{color:var(--ink);border-color:var(--ink-3)}
+.intro main{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 0 18px;min-height:0}
+.title{margin:0;padding:0 20px;font-size:clamp(30px,4.3vw,56px);line-height:1.32;letter-spacing:-.02em;font-weight:700;color:var(--forest);text-wrap:balance}
+.title .first{display:block;font-size:.62em;font-weight:500;color:var(--ink-3);letter-spacing:-.02em;margin-bottom:4px}
+.word{display:inline-block;min-width:4.2em;color:var(--soil-edge);position:relative;transition:opacity .18s,transform .18s}
+.word::after{content:'';position:absolute;left:4%;right:4%;bottom:.06em;height:.16em;border-radius:1em;background:var(--sun);opacity:.75;z-index:-1}
+.word.changing{opacity:0;transform:translateY(8px)}
+.scene{position:relative;width:100%;flex:1;min-height:clamp(360px,52vh,640px);margin-top:8px}
+.cta{padding:0 20px;opacity:0;transform:translateY(10px);visibility:hidden;transition:opacity .6s,transform .6s cubic-bezier(.16,1,.3,1),visibility 0s .6s}
+.complete .cta{opacity:1;transform:none;visibility:visible;transition-delay:0s}
+.cta p{margin:0 0 16px;color:var(--ink-2);font-size:15px}
+.cta-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.cta-row .btn-primary{padding:0 26px}
+.replay{display:inline-flex;align-items:center;gap:6px;margin-top:12px;border:0;background:none;color:var(--ink-3);font-size:13px;padding:8px}
+.replay .i{width:15px;height:15px}
+.replay:hover{color:var(--ink)}
+@media (max-width:640px){
+  .topbar{height:60px}
+  .brand{font-size:19px}
+  .login{font-size:13px}
+  .title{font-size:29px}
+  .title .first{font-size:19px}
+  .scene{min-height:560px}
+  .cta p{font-size:14px}
+  .cta-row .btn{flex:1 1 100%}
+}
+@media (min-width:641px) and (max-height:840px){
+  .topbar{height:60px}
+  .title{font-size:clamp(28px,3.3vw,44px)}
+  .title .first{font-size:.58em}
+}

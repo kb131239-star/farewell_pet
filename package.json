@@ -1,0 +1,1 @@
+{"name":"farewell-pet-network","private":true,"scripts":{"dev":"node server.cjs"}}

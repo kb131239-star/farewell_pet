@@ -1,0 +1,5 @@
+const hospitals = [
+  {name:'전남동물의료센터',type:'hospital',image:'assets/jeonnam.png',address:'전라남도 나주시 빛가람로 746, 에스타워 1층 101호',phone:'061-333-8575',description:'나주 빛가람로에 위치한 동물병원입니다. 방문 전 전화로 진료 일정과 필요한 준비사항을 확인해 주세요.',source:'https://www.mafra.go.kr/bbs/home/792/596078/download.do',sourceLabel:'농림축산식품부 공개 자료',features:['동물병원','빛가람동','전화 문의','진료시간 확인 필요']},
+  {name:'가람동물병원',type:'hospital',image:'assets/garam.png',address:'전라남도 나주시 배멧1길 40, 창우빌딩 101호',phone:'061-332-7975',description:'빛가람동 창우빌딩 1층에 위치한 동물병원입니다. 진료 가능 항목과 예약 여부는 병원에 직접 문의해 주세요.',source:'https://fah.purpleo.co.kr/view/3926',sourceLabel:'동물병원 공개 정보',features:['동물병원','창우빌딩 1층','전화 문의','진료시간 확인 필요']},
+  {name:'채움동물병원',type:'hospital',image:'assets/chaeum.png',address:'전라남도 나주시 그린로 207, 102·103호',phone:'061-335-7975',description:'나주 그린로에 위치한 동물병원입니다. 아이의 상태와 방문 목적을 미리 전달하고 진료 일정을 확인해 주세요.',source:'https://www.daangn.com/kr/local-profile/채움동물병원-apqsofws5rmc/',sourceLabel:'업체 안내 페이지',features:['동물병원','빛가람동','전화 문의','진료시간 확인 필요']}
+];
