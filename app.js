@@ -186,7 +186,7 @@
     const reviews=`<div class="empty small">${icon('chat')}<b>아직 연결된 후기가 없어요</b><p>블로그 후기 연결은 준비 중이에요. 다녀온 뒤 이용기록에 남겨 두면 다음 선택에 도움이 돼요.</p><button type="button" class="btn btn-soft" id="review-record">이용기록 남기기</button></div>`;
     $('#detail-body').innerHTML=`
       <div class="d-hero ${p.image?'photo':'art'}">${p.image?`<img src="${p.image}" alt="${esc(p.name)} 외관">`:`<svg viewBox="-80 -80 160 140" aria-hidden="true">${TrailMap.art(kindArt(p))}</svg>`}</div>
-      <div class="d-title"><span class="kind">${esc({hotel:'호텔',care:'가정 돌봄',kindergarten:'유치원',grooming:'미용실',hospital:'동물병원'}[p.cat])}</span><h2 id="detail-title">${esc(p.name)}${p.example?'<span class="ex">예시</span>':''}</h2>${v.status!=='none'?`<span class="status ${v.status}">${{ok:'조건에 맞아요',unknown:'확인이 필요해요',no:'조건이 맞지 않아요'}[v.status]}</span>`:''}</div>
+      <div class="d-title"><span class="kind">${esc(p.kindLabel||{hotel:'호텔',care:'가정 돌봄',kindergarten:'유치원',grooming:'미용실',hospital:'동물병원'}[p.cat])}</span><h2 id="detail-title">${esc(p.name)}${p.example?'<span class="ex">예시</span>':''}</h2>${v.status!=='none'?`<span class="status ${v.status}">${{ok:'조건에 맞아요',unknown:'확인이 필요해요',no:'조건이 맞지 않아요'}[v.status]}</span>`:''}</div>
       <div class="d-tabs" role="tablist">${['정보','요금','후기'].map((t,i)=>`<button type="button" role="tab" id="dt-${i}" aria-controls="dp-${i}" aria-selected="${i===0}">${t}</button>`).join('')}</div>
       <div class="d-panel" role="tabpanel" id="dp-0" aria-labelledby="dt-0">${info}</div>
       <div class="d-panel" role="tabpanel" id="dp-1" aria-labelledby="dt-1" hidden>${price}</div>
