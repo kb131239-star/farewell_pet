@@ -67,9 +67,9 @@
      sizes:{},attrs:{'데이케어':true,'목욕':true,'실내 놀이터':true,'실외 놀이터':true,'애견카페':true},
      source:'https://www.instagram.com/meongcastle/',sourceLabel:'멍캐슬 인스타그램',checked:'2026.11.01',prices:null},
     {id:'kinder-dabang',kindLabel:'유치원·호텔',name:'멍다방',cat:'kindergarten',kinds:['kinder','hotel'],region:'나주시',dist:2,
-     address:'전라남도 나주시 배멧1길 46, 302호 (빛가람동)',phone:null,
+     address:'전라남도 나주시 배멧1길 46, 302호 (빛가람동)',phone:'0507-1433-6550',
      hours:'09:30 - 19:00 · 수요일 휴무',
-     description:'애견카페와 유치원, 호텔을 함께 운영하는 곳이에요. 방문 후기에 따르면 주차 공간이 넉넉하다고 해요. 전화번호는 아직 확인하지 못해서, 인스타그램 메시지로 문의해 주세요.',
+     description:'애견카페와 유치원, 호텔을 함께 운영하는 곳이에요. 방문 후기에 따르면 주차 공간이 넉넉하다고 해요.',
      sizes:{},attrs:{'데이케어':true,'애견카페':true,'주차장':true},
      source:'https://www.instagram.com/mungdabang/',sourceLabel:'멍다방 인스타그램',checked:'2026.11.01',prices:null}
   ];
