@@ -95,6 +95,14 @@
     G('groom-dadeum','살롱다듬','전라남도 나주시 그린로 204, 1동 104호 (빛가람동)','0507-1452-3433','매일 10:00 - 19:00','2026년 8월에 문을 연 빛가람동 미용실이에요.',{},2)
   ];
   const moreKinder=[
+    {id:'kinder-nolmeong',name:'놀멍쉬멍',cat:'kindergarten',kinds:['kinder','hotel'],kindLabel:'애견카페·유치원·호텔',region:'나주시',dist:3,
+     address:'전라남도 나주시 대호길 93, 3층 (대호동)',phone:'0507-1331-3698',
+     hours:'10:00 - 19:00 · 월요일 휴무',
+     description:'애견카페와 놀이방, 유치원, 호텔링을 함께 운영하는 곳이에요. 카페는 보호자 1인당 음료 1잔 주문이 기본이에요.',
+     sizes:{},attrs:{'애견카페':true,'데이케어':true},
+     source:'https://www.instagram.com/nmsm_petcafe/',sourceLabel:'놀멍쉬멍 인스타그램',checked:'2026.11.01',
+     priceNote:'애견카페 입장료예요. 유치원·호텔 요금은 업체에 문의해 주세요.',
+     prices:[['애견카페 입장료',[['소형견','4,000원'],['대형견','5,000원'],['보호자','2,000원']]]]},
     {id:'kinder-sogae',name:'소개유치원',cat:'kindergarten',kinds:['kinder','hotel'],kindLabel:'유치원·호텔',region:'나주시',dist:2,
      address:'전라남도 나주시 상야1길 21, 킹덤프라자 A동 405호 (빛가람동)',phone:'010-3966-0045',
      hours:'10:00 - 20:00 (요일별로 확인해 주세요)',
