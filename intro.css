@@ -4,7 +4,7 @@ body.intro{min-height:100dvh;display:flex;flex-direction:column;background:#FFFF
 .intro main{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 0 18px;min-height:0}
 .title{margin:0;padding:0 20px;font-size:clamp(30px,4.3vw,56px);line-height:1.32;letter-spacing:-.02em;font-weight:700;color:var(--forest);text-wrap:balance}
 .title .first{display:block;font-size:.62em;font-weight:500;color:var(--ink-3);letter-spacing:-.02em;margin-bottom:4px}
-.word{display:inline-block;min-width:4.2em;color:var(--soil-edge);position:relative;transition:opacity .18s,transform .18s}
+.word{display:inline-block;min-width:4.2em;color:var(--primary);position:relative;transition:opacity .18s,transform .18s}
 .word::after{content:'';position:absolute;left:4%;right:4%;bottom:.06em;height:.16em;border-radius:1em;background:var(--sun);opacity:.75;z-index:-1}
 .word.changing{opacity:0;transform:translateY(8px)}
 .scene{position:relative;width:100%;flex:1;min-height:clamp(360px,52vh,640px);margin-top:8px}
@@ -30,4 +30,54 @@ body.intro{min-height:100dvh;display:flex;flex-direction:column;background:#FFFF
   .topbar{height:60px}
   .title{font-size:clamp(28px,3.3vw,44px)}
   .title .first{font-size:.58em}
+}
+
+/* 우리 이야기 */
+html{scroll-behavior:smooth}
+.scroll-hint{display:flex;flex-direction:column;align-items:center;gap:2px;margin:6px auto 22px;color:var(--ink-3);font-size:13px;text-decoration:none;width:max-content}
+.scroll-hint .i{width:18px;height:18px;animation:hint 1.8s ease-in-out infinite}
+@keyframes hint{50%{transform:translateY(4px)}}
+.story{max-width:1040px;margin:0 auto;padding:40px 24px 90px;display:grid;gap:110px}
+.story h2{font-size:clamp(24px,3vw,34px);color:var(--forest);letter-spacing:-.02em;margin:0 0 26px;text-align:center}
+.story-name{text-align:center}
+.wordplay{display:flex;align-items:center;justify-content:center;gap:clamp(12px,3vw,32px);flex-wrap:wrap;margin:10px 0 4px;font-family:'Arial Rounded MT Bold','Trebuchet MS',var(--font);font-size:clamp(30px,5vw,60px);letter-spacing:.01em;line-height:1.15}
+.wordplay span{white-space:nowrap}
+@media (min-width:761px){.wordplay{flex-wrap:nowrap}}
+.wordplay b{font-weight:800}
+.wordplay .y{color:var(--sun)}
+.wordplay .b{color:var(--primary)}
+.wordplay .arrow{width:clamp(28px,4vw,48px);height:clamp(28px,4vw,48px);color:var(--ink);stroke-width:2.4}
+.welfare{margin:0 0 30px;font-family:'Arial Rounded MT Bold','Trebuchet MS',var(--font);font-weight:800;font-size:clamp(22px,3.4vw,38px);letter-spacing:.14em;color:var(--ink)}
+.story .lead{max-width:40em;margin:0 auto;font-size:clamp(16px,1.6vw,19px);line-height:1.85;color:var(--ink-2)}
+.palette-note{display:inline-flex;align-items:center;gap:8px;margin:26px auto 0;padding:9px 16px;border-radius:999px;background:var(--surface-2);font-size:14px;color:var(--ink-2)}
+.palette-note .dot{width:14px;height:14px;border-radius:50%}
+.palette-note .dot.y{background:var(--sun)}.palette-note .dot.b{background:var(--primary);margin-right:4px}
+.beliefs ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:16px;counter-reset:b}
+.beliefs li{counter-increment:b;display:grid;gap:8px;padding:24px 24px 24px 70px;position:relative;border-radius:22px;border:1.5px solid var(--line);background:#fff}
+.beliefs li::before{content:counter(b);position:absolute;left:22px;top:22px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:var(--soil-pale);color:var(--soil-edge)}
+.beliefs li:nth-child(even)::before{background:var(--primary-tint);color:var(--primary)}
+.beliefs b{font-size:18px;color:var(--ink)}
+.beliefs span{font-size:15px;color:var(--ink-2);line-height:1.7}
+.chorong{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(28px,5vw,64px);align-items:start}
+.chorong h2{grid-column:1/-1}
+.photos{position:relative;height:clamp(420px,46vw,560px)}
+.ph{position:absolute;margin:0;padding:12px 12px 14px;background:#fff;border-radius:6px;box-shadow:0 14px 34px -14px rgba(19,48,95,.35),0 2px 6px rgba(19,48,95,.08);width:62%}
+.ph img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:3px}
+.ph figcaption{font-size:14px;color:var(--ink-2);text-align:center;margin-top:10px}
+.ph.a{left:0;top:0;transform:rotate(-4deg)}
+.ph.b{right:0;bottom:0;transform:rotate(3deg)}
+.letter{font-size:16.5px;line-height:1.95;color:var(--ink-2);padding-top:6px}
+.letter p{margin:0 0 18px}
+.letter .sign{margin-top:28px;text-align:right;color:var(--ink);font-weight:600}
+.story-cta{text-align:center;padding:42px 20px;border-radius:28px;background:var(--soil-pale)}
+.story-cta p{font-size:20px;color:var(--forest);font-weight:700;margin:0 0 18px}
+@media (max-width:760px){
+  .story{gap:80px;padding:20px 18px 70px}
+  .beliefs ol{grid-template-columns:1fr}
+  .chorong{grid-template-columns:1fr}
+  .photos{height:auto;display:flex;gap:10px}
+  .ph{position:relative;width:50%;padding:8px 8px 10px}
+  .ph figcaption{font-size:12px}
+  .ph.a,.ph.b{left:auto;right:auto;top:auto;bottom:auto}
+  .ph.b{margin-top:30px}
 }

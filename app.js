@@ -131,7 +131,7 @@
         <span class="thumb ${p.image?'photo':'art'}">${thumb(p)}</span>
         <span class="place-text">
           <span class="place-name">${esc(p.name)}${p.example?'<span class="ex">예시</span>':''}</span>
-          <span class="place-meta">${esc(p.address)}</span>
+          <span class="place-meta">${esc(p.address)}</span>${visitBadge(p)}
           ${rows.length?`<ul class="checks">${rows.map(markRow).join('')}</ul>`:`<span class="place-meta">${p.cat==='hospital'?'진료 조건은 병원에 확인해 주세요':'조건을 고르면 하나씩 대조해 드려요'}</span>`}
         </span>
       </button>
@@ -161,6 +161,14 @@
   function back2filter(){$('#results').close('back');openFilter();}
   $('#results-back').addEventListener('click',back2filter);
 
+
+  /* ---------- 산책 일기 연결 ---------- */
+  function visitBadge(p){const v=Diary.forPlace(p.id)[0];if(!v)return '';return `<span class="visit ${v.mood}">${icon('book')}지난번 ${esc(Diary.MOODS[v.mood]||'다녀왔어요')}</span>`;}
+  function diarySec(p){
+    const vs=Diary.forPlace(p.id);
+    return `<section class="d-sec diary-sec"><h3>${esc(josa.of(petName))} 산책 일기</h3>${vs.length?`<ul class="visits">${vs.slice(0,3).map(v=>`<li><span class="dt">${esc(v.date.slice(5).replace('-','/'))}</span><span class="mood ${v.mood}">${esc(Diary.MOODS[v.mood]||'')}</span>${v.text?`<span class="tx">${esc(v.text)}</span>`:''}</li>`).join('')}</ul>`:'<p class="muted">아직 다녀온 기록이 없어요. 다녀왔다면 일기로 남겨 두세요. 다음에 고를 때 함께 보여 드려요.</p>'}<button type="button" class="btn btn-soft" id="diary-write">${icon('edit')}다녀왔어요 · 일기 쓰기</button></section>`;
+  }
+
   /* ---------- 상세 ---------- */
   let detailPlace=null;
   function openDetail(id){
@@ -174,7 +182,7 @@
     const unknown=Object.entries(p.attrs).filter(([,val])=>val===undefined).map(([a])=>a);
     const sizes=Object.entries(p.sizes).filter(([,val])=>val).map(([s])=>s);
     const info=`
-      <section class="d-sec match"><h3>${esc(josa.of(petName))} 조건 대조</h3>${v.rows.length?`<ul class="checks big">${v.rows.map(markRow).join('')}</ul>`:`<p class="muted">필터에서 조건을 고르면 여기서 하나씩 대조해 드려요.</p>`}</section>
+      <section class="d-sec match"><h3>${esc(josa.of(petName))} 조건 대조</h3>${v.rows.length?`<ul class="checks big">${v.rows.map(markRow).join('')}</ul>`:`<p class="muted">필터에서 조건을 고르면 여기서 하나씩 대조해 드려요.</p>`}</section>${diarySec(p)}
       <section class="d-sec"><h3>정보</h3><p class="line">${icon('clock')}${esc(p.hours||'영업시간은 아직 확인하지 못했어요. 방문 전에 전화로 확인해 주세요.')}</p>${sizes.length?`<p class="line">${icon('paw')}${sizes.map(esc).join(' · ')} 이용 가능</p>`:''}${p.description?`<p class="muted">${esc(p.description)}</p>`:''}</section>
       ${services.length?`<section class="d-sec"><h3>주요 서비스</h3><div class="tags">${services.map(s=>`<span>${esc(s)}</span>`).join('')}</div></section>`:''}
       ${facilities.length?`<section class="d-sec"><h3>돌봄 시설</h3><div class="facil">${facilities.map(a=>`<span>${icon(FACILITY_ICONS[a])}${esc(a)}</span>`).join('')}</div></section>`:''}
@@ -183,7 +191,7 @@
       <section class="d-sec"><h3>위치</h3><p class="line">${icon('pin')}<span>${esc(p.address)}</span>${p.example?'':`<button type="button" class="icon-btn small" id="copy-addr" aria-label="주소 복사">${icon('copy')}</button>`}</p>${p.example?'':`<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name+' '+p.address)}" target="_blank" rel="noopener noreferrer">지도에서 보기 ${icon('external')}</a>`}</section>
       ${p.source?`<p class="source">정보 확인일 ${esc(p.checked)} · <a href="${p.source}" target="_blank" rel="noopener noreferrer">${esc(p.sourceLabel)} ${icon('external')}</a></p>`:p.checked?`<p class="source">정보 확인일 ${esc(p.checked)} · 출처: ${esc(p.sourceLabel||'')}</p>`:''}`;
     const price=p.prices?`${p.example?'<p class="note">예시 요금이에요. 실제 업체 요금이 아니에요.</p>':p.priceNote?`<p class="note">${esc(p.priceNote)}</p>`:''}${p.prices.map(([g,rows])=>`<section class="price"><h3>${esc(g)}</h3><dl>${rows.map(([k,val])=>`<div><dt>${esc(k)}</dt><dd class="tnum">${esc(val)}</dd></div>`).join('')}</dl></section>`).join('')}`:(p.cat==='hospital'?`<div class="empty small"><b>진료비는 병원마다 달라요</b><p>같은 진료라도 병원별 차이가 커요. 방문 전에 예상 비용을 꼭 물어보세요.</p></div>`:`<div class="empty small"><b>요금은 아직 확인 전이에요</b><p>미용 종류와 아이의 체중·털 상태에 따라 달라져요. 예약할 때 예상 요금을 물어보세요.</p></div>`);
-    const reviews=`<div class="empty small">${icon('chat')}<b>아직 연결된 후기가 없어요</b><p>블로그 후기 연결은 준비 중이에요. 다녀온 뒤 이용기록에 남겨 두면 다음 선택에 도움이 돼요.</p><button type="button" class="btn btn-soft" id="review-record">이용기록 남기기</button></div>`;
+    const reviews=`<div class="empty small">${icon('chat')}<b>아직 연결된 후기가 없어요</b><p>블로그 후기 연결은 준비 중이에요. 다녀온 뒤 산책 일기에 남겨 두면 다음 선택에 도움이 돼요.</p><button type="button" class="btn btn-soft" id="review-record">산책 일기 쓰기</button></div>`;
     $('#detail-body').innerHTML=`
       <div class="d-hero ${p.image?'photo':'art'}">${p.image?`<img src="${p.image}" alt="${esc(p.name)} 외관">`:`<svg viewBox="-80 -80 160 140" aria-hidden="true">${TrailMap.art(kindArt(p))}</svg>`}</div>
       <div class="d-title"><span class="kind">${esc(p.kindLabel||{hotel:'호텔',care:'가정 돌봄',kindergarten:'유치원',grooming:'미용실',hospital:'동물병원'}[p.cat])}</span><h2 id="detail-title">${esc(p.name)}${p.example?'<span class="ex">예시</span>':''}</h2>${v.status!=='none'?`<span class="status ${v.status}">${{ok:'조건에 맞아요',unknown:'확인이 필요해요',no:'조건이 맞지 않아요'}[v.status]}</span>`:''}</div>
@@ -193,7 +201,8 @@
       <div class="d-panel" role="tabpanel" id="dp-2" aria-labelledby="dt-2" hidden>${reviews}</div>`;
     $('#detail-body').querySelectorAll('[role=tab]').forEach((t,i,all)=>t.addEventListener('click',()=>{all.forEach((x,j)=>{x.setAttribute('aria-selected',i===j);$('#dp-'+j).hidden=i!==j;});}));
     const ca=$('#copy-addr');if(ca)ca.onclick=()=>copy(p.address,'주소를 복사했어요.');
-    $('#review-record').onclick=()=>{$('#detail').close();recordModal(p.name);};
+    $('#review-record').onclick=()=>{$('#detail').close();Diary.openForm({placeId:p.id});};
+    const dw=$('#diary-write');if(dw)dw.onclick=()=>{$('#detail').close();Diary.openForm({placeId:p.id});};
     const call=$('#call');
     if(p.phone){call.href='tel:'+p.phone;call.removeAttribute('aria-disabled');call.title='';call.classList.remove('disabled');}
     else{call.removeAttribute('href');call.setAttribute('aria-disabled','true');call.classList.add('disabled');call.title=p.example?'예시 업체라 전화할 수 없어요':'전화번호 확인 전이에요';}
@@ -237,12 +246,7 @@
     const s=SOON[id];
     modal(s.title,`<div class="soon"><svg viewBox="-60 -66 120 116" aria-hidden="true">${TrailMap.art(s.kind)}</svg><span class="soon-tag">준비 중</span><p>${esc(s.body)}</p><p class="muted">${esc(s.note)}</p></div>`,`<button type="button" class="btn btn-primary" data-close>산책 지도로 돌아가기</button>`);
   }
-  function recordModal(place=''){
-    modal('이용기록 남기기',`<label class="field-l">다녀온 곳<input name="place" required maxlength="60" value="${esc(place)}" placeholder="예: 느린하루 펫스테이"></label><label class="field-l">다녀온 날<input type="date" name="date" required></label><div class="field-l"><span>${esc(josa.of(petName))} 적응 정도</span><div class="chips">${['잘 적응했어요','시간이 필요했어요','힘들어했어요'].map((m,i)=>`<label class="chip"><input type="radio" name="mood" value="${m}" ${i===0?'checked':''}>${m}</label>`).join('')}</div></div><label class="field-l">다음을 위한 메모<textarea name="memo" rows="4" maxlength="1000" placeholder="아이의 반응과 다음에 챙길 점을 남겨 주세요."></textarea></label>`,`<button type="submit" form="modal-form" class="btn btn-primary">기록 저장하기</button>`,fd=>{
-      const r=Object.fromEntries(fd);if(!r.place.trim()||!r.date){toast('다녀온 곳과 날짜를 입력해 주세요.');return;}
-      state.records.unshift(r);save();$('#modal').close();setView('history');toast('이용기록을 저장했어요.');
-    });
-  }
+
 
   /* ---------- 찜 · 기록 화면 ---------- */
   function toggleSave(id){
@@ -255,16 +259,12 @@
     const list=state.saved.map(id=>PLACES.find(p=>p.id===id)).filter(Boolean);
     $('#saved-list').innerHTML=list.length?list.map(p=>card({p,rows:[]})).join(''):`<div class="empty">${Minimi.svg(Minimi.config(pet))}<b>아직 찜한 곳이 없어요</b><p>산책 지도에서 마음에 드는 곳의 하트를 눌러 담아 보세요.</p><button type="button" class="btn btn-soft" data-goto="map">산책 지도로 가기</button></div>`;
   }
-  function renderHistory(){
-    $('#history-title').textContent=`${josa.of(petName)} 이용기록`;
-    const moodCls={'잘 적응했어요':'ok','시간이 필요했어요':'unknown','힘들어했어요':'no'};
-    $('#history-list').innerHTML=state.records.length?state.records.map((r,i)=>`<article class="record"><div class="record-top"><div><h3>${esc(r.place)}</h3><span class="tnum">${esc(r.date)}</span></div><button type="button" class="icon-btn" data-delete="${i}" aria-label="${esc(r.place)} 기록 삭제">${icon('trash')}</button></div><span class="mood ${moodCls[r.mood]||''}">${esc(r.mood)}</span>${r.memo?`<p>${esc(r.memo)}</p>`:''}</article>`).join(''):`<div class="empty">${Minimi.svg(Minimi.config(pet))}<b>아직 이용기록이 없어요</b><p>첫 돌봄 경험을 남겨 보세요. 다음에 고를 때 참고할 수 있어요.</p></div>`;
-  }
+
   function setView(v){
     view=v;
     document.querySelectorAll('.view').forEach(s=>s.hidden=s.id!=='view-'+v);
     document.querySelectorAll('.tabbar button').forEach(b=>{if(b.dataset.view===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
-    if(v==='saved')renderSaved();if(v==='history')renderHistory();
+    if(v==='saved')renderSaved();if(v==='diary')Diary.render();
     if(v==='map')map.redraw();
     window.scrollTo(0,0);
   }
@@ -276,15 +276,15 @@
     if(t.dataset.goto)setView(t.dataset.goto);
     if(t.dataset.save){e.stopPropagation();toggleSave(t.dataset.save);}
     if(t.dataset.open)openDetail(t.dataset.open);
-    if(t.dataset.delete!==undefined){state.records.splice(+t.dataset.delete,1);save();renderHistory();toast('기록을 지웠어요.');}
     if(t.hasAttribute('data-close'))t.closest('dialog').close();
   });
-  $('#add-record').addEventListener('click',()=>recordModal());
+  
   document.querySelectorAll('dialog').forEach(d=>{
     d.addEventListener('click',e=>{if(e.target===d)d.close();});
     d.addEventListener('close',()=>{if(![...document.querySelectorAll('dialog')].some(x=>x.open))map.home();});
   });
 
+  Diary.init({state,save,PLACES,pet,petName,modal,toast,setView,close:()=>$('#modal').close()});
   renderHeader();
   const go=new URLSearchParams(location.search).get('go');
   if(go&&FILTERS[go])setTimeout(()=>map.walkTo(go,()=>openNode(go)),500);

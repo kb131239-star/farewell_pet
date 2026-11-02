@@ -14,7 +14,7 @@
   <nav class="tabbar" aria-label="주 메뉴">
     <button type="button" data-view="map" aria-current="page"><svg class="i" aria-hidden="true"><use href="#i-map"/></svg><span>산책 지도</span></button>
     <button type="button" data-view="saved"><svg class="i" aria-hidden="true"><use href="#i-heart"/></svg><span>찜한 곳</span><b class="badge tnum" id="saved-count">0</b></button>
-    <button type="button" data-view="history"><svg class="i" aria-hidden="true"><use href="#i-list"/></svg><span>이용기록</span></button>
+    <button type="button" data-view="diary"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg><span>산책 일기</span></button>
   </nav>
   <a class="me" href="profile.html" id="me" aria-label="내 프로필"></a>
 </header>
@@ -37,9 +37,12 @@
     <div class="list" id="saved-list"></div>
   </section>
 
-  <section class="view view-list" id="view-history" hidden>
-    <div class="list-head"><div><h1 id="history-title">이용기록</h1><p class="lead">다녀온 곳에서 어땠는지 남기면, 다음에 고를 때 참고할 수 있어요.</p></div><button type="button" class="btn btn-primary" id="add-record"><svg class="i" aria-hidden="true"><use href="#i-plus"/></svg>기록 남기기</button></div>
-    <div class="list" id="history-list"></div>
+  <section class="view view-list view-diary" id="view-diary" hidden>
+    <div class="list-head"><div><h1 id="diary-title">산책 일기</h1><p class="lead">다녀온 날의 기억과 다녀올 날의 예정을 한 권에 모아요. 남긴 기록은 다음에 시설을 고를 때 함께 보여 드려요.</p></div><button type="button" class="btn btn-primary" id="diary-new"><svg class="i" aria-hidden="true"><use href="#i-edit"/></svg>일기 쓰기</button></div>
+    <div class="cal" id="cal"></div>
+    <div class="diary-sum" id="diary-sum"></div>
+    <div class="list diary-list" id="diary-list"></div>
+    <aside class="cal-sync"><div><b>구글 캘린더와 연결</b><p>일기마다 ‘구글 캘린더에 추가’를 누르면 내 캘린더에 일정이 들어가요. 한꺼번에 옮기려면 캘린더 파일로 받아 구글 캘린더의 ‘가져오기’에서 열어 주세요.</p></div><button type="button" class="btn btn-soft" id="diary-ics"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg>캘린더 파일(.ics) 받기</button></aside>
   </section>
 </main>
 
@@ -78,6 +81,7 @@
 <script src="trailmap.js"></script>
 <script src="hospitals.js"></script>
 <script src="places.js"></script>
+<script src="diary.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -143,7 +143,7 @@
   };
   const SOON={
     consult:{title:'실시간·전문가 상담',kind:'consult',body:'병원에 가기 전 궁금한 점을 AI 안내로 정리하고, 필요하면 수의사 상담을 예약하는 기능을 준비하고 있어요.',note:'AI 안내는 진단이나 처방을 대신하지 않아요. 아이가 아프다면 가까운 동물병원에 먼저 연락해 주세요.'},
-    together:{title:'보호자와 함께 공간',kind:'together',body:'애견카페, 동반 식당, 반려견 놀이터처럼 보호자와 함께 머물 수 있는 곳을 모으고 있어요.',note:'공간마다 체급 제한과 입장 조건이 달라서, 확인된 정보부터 차례로 열어 둘게요.'},
+    together:{title:'커뮤니티',kind:'together',body:'보호자끼리 산책 친구를 찾고, 다녀온 곳의 경험과 정보를 나누는 공간을 준비하고 있어요.',note:'광고나 제휴와 상관없이 보호자의 실제 경험이 먼저 보이도록 만들 거예요.'},
     star:{title:'별들의 공간',kind:'star',body:'무지개다리를 건넌 아이를 기억하는 공간이에요. 장례와 추모에 필요한 정보를 조심스럽게 준비하고 있어요.',note:'준비가 끝나면 이 산책로 끝에서 만날 수 있어요.'}
   };
   window.PLACES=[...hospitalPlaces,...moreHospitals,...kindergartens,...moreKinder,...grooming,...moreGrooming,...examples];

@@ -47,6 +47,15 @@
     large:{hs:.88,bw:80,bh:64,leg:27,lw:18}
   };
   const BOX='16 22 168 194';
+  /* 표정: great 신났어요 · ok 괜찮았어요 · hard 힘들어했어요 */
+  function faceParts(mood,p){
+    const nose='<ellipse cx="100" cy="101" rx="6.6" ry="4.8" fill="#24180F"/>';
+    const k='fill="none" stroke="#24180F" stroke-width="2.8" stroke-linecap="round"';
+    const eyeR=p.patch?'<circle cx="116" cy="90" r="4.8" fill="#fff"/><circle cx="116" cy="90" r="3.4" fill="#24180F"/>':'<circle cx="116" cy="90" r="4.8" fill="#24180F"/>';
+    if(mood==='great')return `<path d="M78 92 q6 -8 12 0" ${k}/><path d="M110 92 q6 -8 12 0" ${k} ${p.patch?'stroke="#fff"':''}/>${nose}<path d="M100 105 v3" ${k}/><path d="M89 108 q11 14 22 0 z" fill="#24180F"/><ellipse cx="100" cy="115.5" rx="5.5" ry="3.6" fill="#EF8A8A"/>`;
+    if(mood==='hard')return `<path d="M77 85 l11 -5" ${k}/><path d="M123 85 l-11 -5" ${k}/><circle cx="84" cy="91" r="4.2" fill="#24180F"/>${eyeR.replace(/r="4.8"/g,'r="4.2"')}<path d="M80 98 q-2 5 1 7 q3 -2 1 -7 z" fill="#8FC3F0"/>${nose}<path d="M100 105 v3" ${k}/><path d="M92 114 q8 -6 16 0" ${k}/>`;
+    return `<circle cx="84" cy="90" r="4.8" fill="#24180F"/>${eyeR}<circle cx="85.6" cy="88.4" r="1.6" fill="#fff"/><circle cx="117.6" cy="88.4" r="1.6" fill="#fff"/>${nose}<path d="M100 105 v4 M100 109 q-5 5 -9.5 1 M100 109 q5 5 9.5 1" fill="none" stroke="#24180F" stroke-width="2.4" stroke-linecap="round"/>`;
+  }
   function svg(cfg={},opt={}){
     const c={face:'floppy',size:'medium',color:'brown',acc:'none',...cfg};
     const p=COLORS[c.color]||COLORS.brown;
@@ -69,7 +78,7 @@
     const eyePatch=p.patch?`<ellipse cx="117" cy="88" rx="13" ry="11" fill="${p.patch}"/>`:'';
     const label=opt.title?`<title>${opt.title}</title>`:'';
     const shadow=opt.shadow===false?'':`<ellipse cx="100" cy="${f(groundY+2)}" rx="${f(bw*.62+10)}" ry="7" fill="rgba(40,60,30,.18)"/>`;
-    const head=`<g transform="translate(100 92) scale(${b.hs}) translate(-100 -92)">${ears(c.face,p,false)}<circle cx="100" cy="92" r="40" fill="${p.base}" stroke="${OUT}" stroke-width="${f(3.2/b.hs)}"/>${eyePatch}${ears(c.face,p,true)}<ellipse cx="100" cy="107" rx="21" ry="14.5" fill="${p.muzzle}"/><circle cx="84" cy="90" r="4.8" fill="#24180F"/><circle cx="116" cy="90" r="4.8" fill="${p.patch?'#fff':'#24180F'}"/>${p.patch?'<circle cx="116" cy="90" r="3.4" fill="#24180F"/>':''}<circle cx="85.6" cy="88.4" r="1.6" fill="#fff"/><circle cx="117.6" cy="88.4" r="1.6" fill="#fff"/><ellipse cx="100" cy="101" rx="6.6" ry="4.8" fill="#24180F"/><path d="M100 105 v4 M100 109 q-5 5 -9.5 1 M100 109 q5 5 9.5 1" fill="none" stroke="#24180F" stroke-width="2.4" stroke-linecap="round"/><ellipse cx="75" cy="104" rx="5.5" ry="3.2" fill="#F19C9C" opacity=".55"/><ellipse cx="125" cy="104" rx="5.5" ry="3.2" fill="#F19C9C" opacity=".55"/>${c.acc==='ribbon'?accessory('ribbon'):''}</g>`;
+    const head=`<g transform="translate(100 92) scale(${b.hs}) translate(-100 -92)">${ears(c.face,p,false)}<circle cx="100" cy="92" r="40" fill="${p.base}" stroke="${OUT}" stroke-width="${f(3.2/b.hs)}"/>${eyePatch}${ears(c.face,p,true)}<ellipse cx="100" cy="107" rx="21" ry="14.5" fill="${p.muzzle}"/>${faceParts(c.mood,p)}<ellipse cx="75" cy="104" rx="5.5" ry="3.2" fill="#F19C9C" opacity=".55"/><ellipse cx="125" cy="104" rx="5.5" ry="3.2" fill="#F19C9C" opacity=".55"/>${c.acc==='ribbon'?accessory('ribbon'):''}</g>`;
     const cs=Math.max(.82,Math.min(1.05,bw/66));
     const collar=c.acc!=='ribbon'&&c.acc!=='none'?`<g transform="translate(100 ${f(hb-3)}) scale(${cs.toFixed(2)}) translate(-100 -128)">${accessory(c.acc)}</g>`:'';
     const content=`${shadow}${tail}${backLegs}${body}${bib}${bodyPatch}${frontLegs}${head}${collar}`;

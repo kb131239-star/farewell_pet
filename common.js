@@ -37,6 +37,8 @@
     'parking':'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M10 16.5v-9h3a2.7 2.7 0 0 1 0 5.4h-3"/>',
     'bag':'<path d="M5.5 8h13l-1 12h-11z"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/>',
     'cup':'<path d="M5 8h11v6a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4z"/><path d="M16 9.5h1.5a2.5 2.5 0 0 1 0 5H16"/><path d="M8 3.5v2M11 3.5v2"/>',
+    'calendar':'<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 10h16M9 3v4M15 3v4"/>',
+    'book':'<path d="M5 4.5h10.5A2.5 2.5 0 0 1 18 7v13H7.5A2.5 2.5 0 0 1 5 17.5z"/><path d="M5 17.5A2.5 2.5 0 0 1 7.5 15H18"/><path d="M9 8.5h5"/>',
     'user':'<circle cx="12" cy="8.5" r="3.8"/><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0"/>'
   };
   function sprite(){
@@ -68,7 +70,7 @@
     {id:'consult',kind:'consult',label:'실시간·전문가 상담',pos:[.96,-.06],cpos:[.8,.02],clines:['실시간·','전문가 상담'],soon:true,detached:true},
     {id:'kinder',kind:'kinder',label:'유치원',pos:[-.66,.8],bend:1},
     {id:'hotel',kind:'hotel',label:'호텔',pos:[.64,.8],bend:-1},
-    {id:'together',kind:'together',label:'보호자와 함께 공간',pos:[-.02,1],bend:1,soon:true}
+    {id:'together',kind:'together',label:'커뮤니티',pos:[0,1.02],cpos:[0,1.02],soon:true,detached:true}
   ];
   window.FP={KEY,NODES,icon,esc,load,save,josa,call,sizeFromWeight,toast,sprite};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sprite);else sprite();
