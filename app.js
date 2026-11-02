@@ -23,6 +23,7 @@
       if(pet.size||pet.weight)facts.push([pet.weight?`${pet.weight}kg · ${pet.size}`:pet.size]);
       if(pet.years!==''&&pet.years!=null)facts.push([`${pet.years}살`]);
       if(pet.breed)facts.push([pet.breed]);
+      if(pet.concerns&&pet.concerns.length)facts.push([`건강 고민 ${pet.concerns.length}가지`,'sun']);
       if(pet.hasMedication==='있음')facts.push(['약 먹는 중','sun']);
       if(pet.mcpq&&pet.mcpq.type)facts.push([pet.mcpq.type,'type']);
       if(pet.dogs)facts.push([`다른 개와 ${pet.dogs.replace('요','').replace('잘 어울려','잘 어울림').replace('천천히 적응해','천천히 적응').replace('혼자가 편해','혼자가 편함')}`]);
@@ -52,7 +53,7 @@
     if((cat==='hotel'||cat==='kinder')&&pet.hasMedication==='있음')n.add('투약 지원');
     if((cat==='hotel'||cat==='kinder')&&(pet.dogs==='혼자가 편해요'||pet.separation==='많이 불안해해요'))n.add('단독 돌봄');
     if(cat==='hotel'&&pet.separation==='많이 불안해해요')n.add('야간 관리');
-    if(cat==='hospital'&&Number(pet.years)>=8)n.add('노령견 진료');
+    if(cat==='hospital'&&(Number(pet.years)>=Concerns.SENIOR_AGE||(pet.concerns||[]).includes('aging')))n.add('노령견 진료');
     return n;
   }
   function defaults(cat){
@@ -227,6 +228,7 @@
     if(facts)lines.push(`${josa.topic(petName)} ${facts}이에요.`);
     lines.push(`${date?date+'에 ':''}${p.cat==='hospital'?'진료':'이용'}가 가능할지 문의드려요.`);
     const asks=[];
+    if(pet.concerns&&pet.concerns.length)asks.push(`건강 고민: ${Concerns.labels(pet.concerns).join(', ')}`);
     if(pet.hasMedication==='있음'&&pet.medications&&pet.medications.length)asks.push(`투약 도움: ${pet.medications.map(m=>[m.name,m.frequency,m.schedule].filter(Boolean).join(' ')).join(' / ')}`);
     if(pet.dogs)asks.push(`다른 개와는 ${pet.dogs.replace(/요$/,'')}요. 합사 방식이 궁금해요.`);
     if(pet.separation&&pet.separation!=='잘 기다려요')asks.push(`보호자와 떨어지면 ${pet.separation.replace(/요$/,'')}요.`);

@@ -1,7 +1,7 @@
 (function(){
   const {esc,icon,josa}=FP;
   const state=FP.load();
-  const pet={breed:'',years:'',months:'',sex:'',dogs:'',people:'',separation:'',weight:'',hasMedication:'',medications:[],photo:'',...state.pet};
+  const pet={breed:'',years:'',months:'',sex:'',dogs:'',people:'',separation:'',weight:'',concerns:[],hasMedication:'',medications:[],photo:'',...state.pet};
   const form=document.querySelector('#wizard');
   const $=s=>document.querySelector(s);
   const BREEDS=['믹스견','말티즈','푸들','포메라니안','진돗개','비숑프리제','시바견','골든리트리버','기타'];
@@ -45,6 +45,17 @@
      render:p=>`<label class="field"><span class="sr-only">몸무게</span><input name="weight" type="number" inputmode="decimal" step="0.1" min="0.3" max="100" placeholder="0.0" value="${esc(p.weight)}"><span class="unit">kg</span></label><div class="size-badge" id="size-badge" aria-live="polite"></div>`,
      bind:()=>{const upd=()=>{const kg=parseFloat(form.elements.weight.value);const size=FP.sizeFromWeight(kg);const m=Minimi.config({...pet,size});$('#size-badge').innerHTML=size?`${Minimi.svg({...m,size:size==='소형견'?'small':size==='대형견'?'large':'medium'})}<div><strong>${size}이에요</strong><span>${size==='소형견'?'5kg 미만':size==='중형견'?'5kg 이상 15kg 미만':'15kg 이상'} 기준으로 시설을 찾아요.</span></div>`:'<div><strong>몸무게를 입력하면</strong><span>체급(소형·중형·대형)을 알려 드려요.</span></div>';};form.elements.weight.addEventListener('input',upd);upd();},
      read:f=>{const v=f.weight.value;if(v==='')return;const kg=parseFloat(v);if(!(kg>=.3&&kg<=100))return '몸무게는 0.3kg에서 100kg 사이로 입력해 주세요.';pet.weight=Math.round(kg*10)/10;pet.size=FP.sizeFromWeight(kg);if(pet.minimi&&!pet.minimiSizeTouched)pet.minimi.size=undefined;}},
+    {key:'concerns',optional:true,
+     q:p=>`${josa.of(p.name)} 건강 고민을 알려주세요`,
+     hint:p=>`최대 ${Concerns.MAX}개까지 고를 수 있어요.${Concerns.recommended(p).length?' ‘추천’은 나이를 기준으로 많이 살펴보는 항목이고, 진단이 아니에요.':''}`,
+     render:p=>{const rec=Concerns.recommended(p),sel=p.concerns||[];return `<div class="concerns">${Concerns.ordered(p).map(it=>`<label class="concern">${rec.includes(it.id)?'<span class="rec">추천</span>':''}<input type="checkbox" name="concern" value="${it.id}" ${sel.includes(it.id)?'checked':''}>${Concerns.icon(it)}<span>${esc(it.label)}</span></label>`).join('')}</div><p class="concern-count tnum" id="concern-count" aria-live="polite"></p>`;},
+     bind:()=>{
+       const boxes=[...$('#answer').querySelectorAll('input[name=concern]')];
+       const count=()=>{$('#concern-count').textContent=`${boxes.filter(b=>b.checked).length} / ${Concerns.MAX}개 선택`;};
+       boxes.forEach(b=>b.addEventListener('change',()=>{if(boxes.filter(x=>x.checked).length>Concerns.MAX){b.checked=false;showError(`최대 ${Concerns.MAX}개까지 고를 수 있어요.`);}count();}));
+       count();
+     },
+     read:()=>{pet.concerns=[...$('#answer').querySelectorAll('input[name=concern]:checked')].map(b=>b.value);}},
     {key:'meds',optional:true,
      q:p=>`${josa.subj(p.name)} 먹는 약이 있나요?`,
      hint:()=>'투약을 도와줄 수 있는 곳인지 확인할 때 써요. 병원에 문의할 때도 함께 전달할 수 있어요.',
@@ -75,8 +86,15 @@
        const cfg=Minimi.config(pet);let tab='face';
        const tufts=[[8,'#6FA64B'],[22,'#4F8C3F'],[72,'#6FA64B'],[86,'#4F8C3F']].map(([x,c])=>`<svg class="tuft" style="left:${x}%" viewBox="-12 -18 24 20" aria-hidden="true"><path d="M0 0 q-3 -8 -8 -12 M0 0 q0 -11 1.5 -16 M0 0 q3 -8 8 -11" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/></svg>`).join('');
        const paint=(pop)=>{$('#stage').innerHTML=tufts+Minimi.svg(cfg,{title:`${josa.of(pet.name)} 미니미`,cls:pop?'pop':''});};
-       const sets={face:Object.entries(Minimi.FACES),size:Object.entries(Minimi.SIZES),color:Object.entries(Minimi.COLORS).map(([k,v])=>[k,v.label]),acc:Object.entries(Minimi.ACCS)};
-       const opts=()=>{const list=sets[tab];$('#options').className='options'+(list.length>3?' five':'');$('#options').innerHTML=list.map(([k,l])=>`<button type="button" class="opt" data-k="${k}" aria-pressed="${cfg[tab]===k}">${tab==='color'?`<span class="swatch" style="background:${Minimi.COLORS[k].swatch}"></span>`:Minimi.svg({...cfg,[tab]:k},{shadow:false})}${esc(l)}</button>`).join('');};
+       const sets={face:Object.entries(Minimi.FACES),size:Object.entries(Minimi.SIZES),acc:Object.entries(Minimi.ACCS)};
+       const colorOpts=()=>{
+         const swatch=k=>Minimi.palette({...cfg,color:k}).swatch;
+         $('#options').className='options colors';
+         $('#options').innerHTML=Minimi.COLOR_GROUPS.map(([title,keys])=>`<h3 class="color-group">${title}</h3>${keys.map(k=>`<button type="button" class="opt" data-k="${k}" aria-pressed="${cfg.color===k}"><span class="swatch" ${k==='custom'?'id="custom-swatch" ':''}style="background:${swatch(k)}"></span>${esc(Minimi.COLORS[k].label)}</button>`).join('')}${keys.includes('custom')&&cfg.color==='custom'?`<label class="color-pick"><span>원하는 색을 골라 주세요</span><input type="color" id="custom-color" value="${esc(Minimi.palette(cfg).swatch)}" aria-label="털 색 직접 고르기"></label>`:''}`).join('');
+         const pick=$('#custom-color');
+         if(pick)pick.addEventListener('input',()=>{cfg.customColor=pick.value;pet.minimi={...cfg};$('#custom-swatch').style.background=pick.value;paint(false);});
+       };
+       const opts=()=>{if(tab==='color')return colorOpts();const list=sets[tab];$('#options').className='options'+(list.length>3?' five':'');$('#options').innerHTML=list.map(([k,l])=>`<button type="button" class="opt" data-k="${k}" aria-pressed="${cfg[tab]===k}">${Minimi.svg({...cfg,[tab]:k},{shadow:false})}${esc(l)}</button>`).join('');};
        $('#options').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;cfg[tab]=b.dataset.k;if(tab==='size')pet.minimiSizeTouched=true;pet.minimi={...cfg};opts();paint(true);});
        document.querySelector('.tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;tab=b.dataset.tab;document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t===b));opts();});
        paint(false);opts();
@@ -147,13 +165,13 @@
     $('#back').style.visibility='visible';
     asker();progress(i);
     if(s.bind)s.bind();
-    if(dir!==0){const first=$('#answer').querySelector('input:not([type=file]):not([type=radio])');if(first&&!matchMedia('(pointer:coarse)').matches)first.focus();else $('#question').focus({preventScroll:true});}
+    if(dir!==0){const first=$('#answer').querySelector('input:not([type=file]):not([type=radio]):not([type=checkbox])');if(first&&!matchMedia('(pointer:coarse)').matches)first.focus();else $('#question').focus({preventScroll:true});}
   }
 
   function done(){
     persist();progress(total);
     $('#count').textContent='';$('#skip').hidden=true;
-    const summary=[pet.breed,pet.years!==''&&pet.years!=null?`${pet.years}살${pet.months?` ${pet.months}개월`:''}`:'',pet.weight?`${pet.weight}kg · ${pet.size}`:'',pet.hasMedication==='있음'?`약 ${pet.medications.length}가지`:pet.hasMedication==='없음'?'먹는 약 없음':'',pet.mcpq&&pet.mcpq.type?pet.mcpq.type:''].filter(Boolean);
+    const summary=[pet.breed,pet.years!==''&&pet.years!=null?`${pet.years}살${pet.months?` ${pet.months}개월`:''}`:'',pet.weight?`${pet.weight}kg · ${pet.size}`:'',pet.concerns&&pet.concerns.length?`건강 고민: ${Concerns.labels(pet.concerns).join(', ')}`:'',pet.hasMedication==='있음'?`약 ${pet.medications.length}가지`:pet.hasMedication==='없음'?'먹는 약 없음':'',pet.mcpq&&pet.mcpq.type?pet.mcpq.type:''].filter(Boolean);
     document.querySelector('.ask').hidden=true;showError('');
     $('#answer').innerHTML=`<div class="done">${Minimi.svg(Minimi.config(pet),{title:`${josa.of(pet.name)} 미니미`})}<div><h1>${esc(josa.name(pet.name))} 등록 완료!</h1><p>이제 산책로를 따라 ${esc(josa.name(pet.name))}에게 맞는 곳을 찾아볼까요?</p><div class="summary">${summary.map(t=>`<span>${esc(t)}</span>`).join('')||'<span>입력하지 않은 항목은 나중에 채울 수 있어요</span>'}</div></div></div>`;
     $('#next').textContent='산책 지도로 가기';
