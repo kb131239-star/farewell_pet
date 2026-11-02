@@ -1,4 +1,4 @@
-body.intro{min-height:100dvh;display:flex;flex-direction:column;background:radial-gradient(120% 80% at 50% 58%,#F4F8EC 0%,var(--meadow) 55%,#E2ECCF 100%)}
+body.intro{min-height:100dvh;display:flex;flex-direction:column;background:#FFFFFF}
 .login{font-size:14px;font-weight:600;color:var(--ink-2);text-decoration:none;padding:10px 4px;border-bottom:1.5px solid var(--line-2)}
 .login:hover{color:var(--ink);border-color:var(--ink-3)}
 .intro main{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 0 18px;min-height:0}

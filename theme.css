@@ -5,7 +5,7 @@
 @font-face{font-family:'MaruBuri FP';font-weight:700;font-style:normal;font-display:swap;src:local('MaruBuri Bold'),local('MaruBuri-Bold'),url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff2) format('woff2'),url(https://hangeul.pstatic.net/hangeul_static/webfont/MaruBuri/MaruBuri-Bold.woff) format('woff')}
 
 :root{
-  --meadow:#EEF4E2;
+  --meadow:#FFFFFF;
   --meadow-2:#E1ECCD;
   --meadow-3:#D2E3B8;
   --grass:#78AE52;

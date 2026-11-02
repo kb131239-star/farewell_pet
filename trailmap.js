@@ -56,14 +56,13 @@
         return false;
       };
       /* 잔디 결 */
-      let patches='';for(let i=0;i<Math.round(W*H/90000)+3;i++){const x=r()*W,y=r()*H;patches+=`<ellipse cx="${x.toFixed(0)}" cy="${y.toFixed(0)}" rx="${(60+r()*90)*k}" ry="${(18+r()*26)*k}" fill="${r()>.5?'#E3EDD0':'#F3F8EA'}" opacity=".8"/>`;}
-      g.insertAdjacentHTML('beforeend',patches);
+
       let tufts='',flowers='',stones='';
-      const area=W*H, nT=Math.round(area/5200*(o.density||1)), nF=Math.round(area/11000*(o.density||1));
+      const area=W*H, nT=Math.round(area/26000*(o.density||1)), nF=Math.round(area/30000*(o.density||1));
       for(let i=0,tries=0;i<nT&&tries<nT*6;tries++){const x=r()*W,y=r()*H;if(blocked(x,y,6))continue;i++;const s=(.7+r()*.6)*k,c=r()>.4?'#6FA64B':'#4F8C3F';tufts+=`<path transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${s.toFixed(2)})" d="M0 0 q-3 -8 -8 -12 M0 0 q0 -11 1.5 -16 M0 0 q3 -8 8 -11" fill="none" stroke="${c}" stroke-width="2.4" stroke-linecap="round"/>`;}
       const petals=['#FFFFFF','#F5A9BC','#FFD54A','#C9B8F0','#FFFFFF'];
       for(let i=0,tries=0;i<nF&&tries<nF*8;tries++){const x=r()*W,y=r()*H;if(blocked(x,y,10))continue;i++;const s=(.75+r()*.55)*k,c=petals[Math.floor(r()*petals.length)];let pp='';for(let j=0;j<5;j++){const a=j/5*Math.PI*2-.3;pp+=`<circle cx="${(Math.cos(a)*4.2).toFixed(2)}" cy="${(Math.sin(a)*4.2).toFixed(2)}" r="3.3" fill="${c}" stroke="rgba(58,43,32,.35)" stroke-width=".8"/>`;}flowers+=`<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${s.toFixed(2)})"><path d="M0 4 v9" stroke="#5E9A45" stroke-width="2" stroke-linecap="round"/>${pp}<circle r="2.6" fill="${c==='#FFD54A'?'#E08A1E':'#FFC21A'}"/></g>`;}
-      for(let i=0,tries=0;i<Math.round(area/60000);tries++){if(tries>200)break;const x=r()*W,y=r()*H;if(blocked(x,y,4))continue;i++;stones+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(4+r()*4)*k}" ry="${(3+r()*2)*k}" fill="#D9D3C4" stroke="rgba(58,43,32,.3)" stroke-width="1"/>`;}
+      for(let i=0,tries=0;i<Math.round(area/240000);tries++){if(tries>200)break;const x=r()*W,y=r()*H;if(blocked(x,y,4))continue;i++;stones+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(4+r()*4)*k}" ry="${(3+r()*2)*k}" fill="#D9D3C4" stroke="rgba(58,43,32,.3)" stroke-width="1"/>`;}
       g.insertAdjacentHTML('beforeend',stones+tufts+flowers);
       return g;
     }
