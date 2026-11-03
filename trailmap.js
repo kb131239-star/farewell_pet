@@ -89,7 +89,7 @@
       const r=rng(o.seed), g=el('g',{class:'deco','aria-hidden':'true'});
       const samples=[];trailEls.forEach(p=>{const L=p.getTotalLength();for(let t=0;t<=L;t+=14)samples.push(p.getPointAtLength(t));});
       const blocked=(x,y,pad)=>{
-        if(Math.hypot(x-C.x,y-C.y)<R+pad)return true;if(Math.abs(x-C.x)<R*1.5&&y>C.y-R*1.75&&y<C.y+R*1.25)return true;
+        if(y>H-34||y<16||x<10||x>W-10)return true;if(Math.hypot(x-C.x,y-C.y)<R+pad)return true;if(Math.abs(x-C.x)<R*1.5&&y>C.y-R*1.75&&y<C.y+R*1.25)return true;
         for(const n of o.nodes){const q=state.geo[n.id];if(Math.abs(x-q.x)<62*k+pad*.4&&y>q.y-70*k&&y<q.y+68*k)return true;}
         for(const s of samples){if(Math.hypot(x-s.x,y-s.y)<22*k+pad*.5)return true;}
         return false;
