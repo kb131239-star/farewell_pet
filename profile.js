@@ -4,7 +4,7 @@
   const pet={breed:'',years:'',months:'',sex:'',dogs:'',people:'',separation:'',weight:'',concerns:[],hasMedication:'',medications:[],photo:'',...state.pet};
   const form=document.querySelector('#wizard');
   const $=s=>document.querySelector(s);
-  const BREEDS=['믹스견','말티즈','푸들','포메라니안','진돗개','비숑프리제','시바견','골든리트리버','기타'];
+  const BREEDS=['믹스견','말티즈','푸들','포메라니안','시추','치와와','요크셔테리어','비숑프리제','스피츠','닥스훈트','코카스패니얼','프렌치불독','퍼그','미니어처 슈나우저','카발리에','웰시코기','비글','시바견','진돗개','보더콜리','사모예드','골든리트리버','래브라도리트리버','저먼셰퍼드','기타'];
   const radio=(name,values,selected)=>values.map(v=>`<label class="chip"><input type="radio" name="${name}" value="${esc(v)}" ${v===selected?'checked':''}>${esc(v)}</label>`).join('');
 
   function persist(){state.pet=pet;if(!FP.save(state))FP.toast('저장 공간을 쓸 수 없어 이 화면에서만 유지돼요.');}
@@ -49,7 +49,7 @@
      q:p=>`${josa.of(p.name)} 건강 고민을 알려주세요`,
      hint:()=>`최대 ${Concerns.MAX}개까지 고를 수 있어요.`,
      render:p=>{const why=Concerns.explain(p),rec=why.map(h=>h.id),sel=p.concerns||[],lack=Concerns.missing(p);
-       const panel=why.length?`<section class="rec-why"><h3>${esc(josa.name(p.name))}에게 추천하는 이유</h3><ul>${why.map(h=>`<li><b>${esc(Concerns.labels([h.id])[0])}</b> ${h.reasons.slice(0,2).map(r=>esc(r.why)).join(' ')}</li>`).join('')}</ul><p>연구 통계에서 많이 나타난 항목이고, ${esc(josa.name(p.name))}의 진단이 아니에요.${lack.length?` ${esc(lack.join('·'))} 정보를 입력하면 더 맞춰 드려요.`:''}</p><details class="refs"><summary>참고한 연구</summary><ul>${Concerns.usedSources(why).map(s=>`<li>${esc(s.cite)} <a href="${s.url}" target="_blank" rel="noopener noreferrer">원문</a></li>`).join('')}</ul><p>해외 연구는 국내 반려견과 다를 수 있어요.</p></details></section>`:`<p class="rec-none">나이·몸무게·성별·견종을 입력하면 맞는 항목을 추천해 드려요.</p>`;
+       const panel=why.length?`<section class="rec-why"><h3>${esc(josa.name(p.name))}에게 추천하는 이유</h3><ul>${why.map(h=>`<li><b>${esc(Concerns.labels([h.id])[0])}</b> ${h.reasons.slice(0,2).map(r=>esc(r.why)).join('<br>')}</li>`).join('')}</ul><p>연구 통계에서 많이 나타난 항목이고, ${esc(josa.name(p.name))}의 진단이 아니에요. 아직 수의사 검토 전인 프로토타입이에요.${lack.length?` ${esc(lack.join('·'))} 정보를 입력하면 더 맞춰 드려요.`:''}</p><details class="refs"><summary>참고한 연구</summary><ul>${Concerns.usedSources(why).map(s=>`<li>${esc(s.cite)} <a href="${s.url}" target="_blank" rel="noopener noreferrer">원문</a></li>`).join('')}</ul><p>해외 연구는 국내 반려견과 다를 수 있어요.</p></details></section>`:`<p class="rec-none">나이·몸무게·성별·견종을 입력하면 맞는 항목을 추천해 드려요.</p>`;
        return `${panel}<div class="concerns">${Concerns.ordered(p).map(it=>`<label class="concern">${rec.includes(it.id)?'<span class="rec">추천</span>':''}<input type="checkbox" name="concern" value="${it.id}" ${sel.includes(it.id)?'checked':''}>${Concerns.icon(it)}<span>${esc(it.label)}</span></label>`).join('')}</div><p class="concern-count tnum" id="concern-count" aria-live="polite"></p>`;},
      bind:()=>{
        const boxes=[...$('#answer').querySelectorAll('input[name=concern]')];

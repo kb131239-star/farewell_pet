@@ -35,6 +35,8 @@
     egenvall:{cite:'Egenvall A 외(2005). 스웨덴 보험 가입 암컷 8만여 마리의 유선 종양 발생. Prev Vet Med.',url:'https://www.sciencedirect.com/science/article/abs/pii/S0167587705000383'},
     hunprasit:{cite:'Hunprasit V 외(2019). 미국 칼슘옥살레이트 요로 결석 역학. J Vet Intern Med 33(5).',url:'https://academic.oup.com/jvim/article/33/5/2090/8470257'},
     thomsen:{cite:'Thomsen M 외(2023). 시바견 아토피 피부염 미생물군 연구. Microbiome 11:232.',url:'https://doi.org/10.1186/s40168-023-01671-2'},
+    ryu:{cite:'Ryu 외(2025). 국내 소·중형견 아토피 피부염 331마리의 품종별 유병률과 병변 분포. Vet Dermatol.',url:'https://doi.org/10.1111/vde.13329'},
+    bergknut:{cite:'Bergknut N 외(2012). 스웨덴 보험 가입 개 66만여 마리의 추간판 질환 발생률. JAVMA 240(11).',url:'https://utrecht-main-test.atmire.com/items/0098ee89-68e1-49b9-a8f9-ca8bec026e09'},
     kent:{cite:'미국 대학 동물병원 골든 리트리버 부검 655건의 암 관련 사망 분석(2018). PLOS ONE.',url:'https://doaj.org/article/b9937efac1d2485d96bf889fae38a43c'}
   };
 
@@ -107,6 +109,21 @@
       ['teeth',1,always,'카발리에는 믹스견보다 치주 질환 기록 가능성이 약 2.4배예요(영국)','oneillPerio']]],
     [/시바/,[
       ['skin',2,always,'시바견은 특히 일본에서 아토피 피부염 사례가 많이 보고됐어요','thomsen']]],
+    [/코카|코커/,[
+      ['skin',2,always,'코카스패니얼은 국내 아토피 피부염 환견에서 등록 비율보다 많이 나타났어요','ryu']]],
+    [/프렌치/,[
+      ['joint',3,always,'프렌치불독은 믹스견보다 슬개골 탈구 가능성이 약 5.4배예요(영국)','oneillPatella'],
+      ['skin',2,always,'프렌치불독은 국내 아토피 피부염 환견에서 등록 비율보다 많이 나타났어요','ryu']]],
+    [/퍼그/,[
+      ['joint',2,always,'퍼그는 믹스견보다 슬개골 탈구 가능성이 약 3.7배예요(영국)','oneillPatella']]],
+    [/닥스/,[
+      ['joint',3,always,'닥스훈트는 디스크 질환 발생률이 전체 평균보다 약 5~8.5배 높았어요(스웨덴 보험)','bergknut']]],
+    [/슈나우저/,[
+      ['heart',1,from(6),'미니어처 슈나우저는 믹스견보다 심잡음 기록 가능성이 약 2.2배예요(영국)','mattin']]],
+    [/보더/,[
+      ['heart',1,from(6),'보더콜리는 믹스견보다 승모판 질환 진단 가능성이 약 2배예요(영국)','mattin']]],
+    [/셰퍼드|세퍼드/,[
+      ['joint',3,from(6),'저먼셰퍼드는 골관절염 위험이 약 5배 높다는 연구가 있어요','anderson']]],
     [/골든/,[
       ['lump',3,from(6),'미국 대학병원 부검 자료에서 골든 리트리버 사망의 65%가 암과 관련됐어요','kent']]]
   ];
