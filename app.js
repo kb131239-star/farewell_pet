@@ -242,6 +242,13 @@
     modal('간편 돌봄문의',`<p class="muted">${esc(p.name)}에 보낼 문의를 ${esc(josa.of(petName))} 프로필로 미리 채웠어요. 업체로 바로 전송되지는 않아요. 복사해서 문자나 메시지로 보내 주세요.</p><label class="field-l">희망 날짜<input type="date" name="date" id="ask-date"></label><label class="field-l">문의 내용<textarea name="memo" id="ask-memo" rows="9" maxlength="1200"></textarea></label>`,`<button type="submit" form="modal-form" class="btn btn-primary">${icon('copy')}문의 내용 복사하기</button>`,fd=>copy(fd.get('memo'),'문의 내용을 복사했어요.',true));
     const fill=()=>{$('#ask-memo').value=inquiryText(p,$('#ask-date').value?$('#ask-date').value.replace(/-/g,'.'):'');};
     $('#ask-date').addEventListener('change',fill);fill();
+    /* 입점 업체면 복사 대신 채팅으로 바로 보낼 수 있게 한다 */
+    FPAuth.partners().then(list=>{
+      if(!list.has(p.id)||!$('#modal').open||detailPlace!==p)return;
+      $('#modal-form .muted').textContent=`${p.name}에 보낼 문의를 ${josa.of(petName)} 프로필로 미리 채웠어요. 내용을 확인하고 채팅으로 이어가 보세요.`;
+      $('#modal-foot').innerHTML=`<button type="button" class="btn btn-primary" id="ask-chat">${icon('chat')}채팅으로 문의하기</button>`;
+      $('#ask-chat').onclick=()=>{try{sessionStorage.setItem('fp-chat-draft',$('#ask-memo').value);}catch{}location.href='chat.html?place='+encodeURIComponent(p.id);};
+    });
   }
   async function copy(text,msg,close){try{await navigator.clipboard.writeText(text);toast(msg);if(close)$('#modal').close();}catch{toast('복사하지 못했어요. 내용을 길게 눌러 직접 복사해 주세요.');}}
   function openSoon(id){

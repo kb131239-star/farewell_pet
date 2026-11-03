@@ -3,7 +3,13 @@
    - 호텔·돌봄·유치원·미용은 화면 설명용 예시 업체다. 이름·요금·조건 모두 예시이며 화면에 '예시'로 표시한다. */
 (function(){
   const T=true,F=false;
-  const examples=[];
+  /* 채팅 시연용 가상 업체. supabase/schema.sql의 chat_places와 id가 같아야 한다. */
+  const examples=[
+    {id:'demo-partner',name:'초록마당 돌봄(시연용)',example:true,kindLabel:'호텔·유치원',cat:'kindergarten',kinds:['kinder','hotel'],region:'나주시',dist:2,
+     address:'시연용 가상 주소',phone:'',hours:'시연용 가상 업체라 실제 영업시간이 없어요.',
+     description:'채팅 문의를 시연하기 위한 가상의 업체예요. 실제로 운영하는 곳이 아니에요.',
+     sizes:{'소형견':true,'중형견':true,'대형견':true},attrs:{'데이케어':true,'투약 지원':true,'단독 돌봄':true,'야간 관리':true},prices:null}
+  ];
 
 
   /* 미용실: 보호자가 공유한 Google 비즈니스 프로필과 업체 SNS·지역 프로필에서 확인한 정보 (2026.11.01 확인).

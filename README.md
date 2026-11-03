@@ -5,6 +5,9 @@
 - 첫 화면: `index.html`
 - 우리 아이 등록(질문 한 개씩 + 건강 고민 + 미니미 꾸미기 + 성격 검사 MCPQ-R): `profile.html`
 - 산책 지도 · 필터링 · 상세: `services.html`
+- 로그인: `signup.html` · 보호자와 업체 간 1:1 문의: `chat.html`
+
+채팅 설정: Supabase SQL Editor에서 `supabase/schema.sql`을 실행하고 `config.js`에 publishable 키를 넣습니다. 비밀 키는 넣지 않습니다.
 
 호텔·유치원·미용 업체와 요금은 화면 설명용 예시입니다. 병원 3곳은 공개 정보이며, 진료 조건은 병원에 직접 확인해야 합니다.
 

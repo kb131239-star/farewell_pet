@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>문의함 · farewell pet</title>
+<meta name="theme-color" content="#FFFFFF">
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="chat.css">
+</head>
+<body class="chat-page">
+<header class="topbar chat-top">
+  <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#i-paw"/></svg></span>farewell pet</a>
+  <div class="chat-top-links">
+    <a class="top-link" href="services.html">산책 지도</a>
+    <button type="button" class="top-link" id="logout" hidden>로그아웃</button>
+  </div>
+</header>
+<main class="chat-shell" id="shell">
+  <section class="inbox" id="inbox" aria-label="문의 목록">
+    <div class="inbox-head">
+      <h1>문의함</h1>
+      <div class="role-tabs" id="role-tabs" role="tablist" aria-label="문의 구분" hidden></div>
+    </div>
+    <div class="conv-list" id="conv-list"></div>
+    <details class="partner-box" id="partner-box" hidden>
+      <summary>업체 계정이신가요?</summary>
+      <form id="invite-form">
+        <label for="invite-code">전달받은 초대 코드를 입력하면 이 계정이 업체와 연결돼요.</label>
+        <div class="invite-row"><input id="invite-code" autocomplete="off" maxlength="64" placeholder="초대 코드"><button class="btn btn-soft" type="submit">연결하기</button></div>
+      </form>
+    </details>
+  </section>
+  <section class="thread" id="thread" aria-label="대화" hidden>
+    <header class="thread-head">
+      <button type="button" class="icon-btn" id="thread-back" aria-label="문의 목록으로"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg></button>
+      <div class="thread-title"><h2 id="thread-name"></h2><p id="thread-sub"></p></div>
+    </header>
+    <p class="demo-note" id="demo-note" hidden>시연용 가상 업체예요. 실제 업체에 전달되지 않아요.</p>
+    <div class="messages" id="messages" role="log" aria-live="polite" tabindex="0"></div>
+    <form class="composer" id="composer">
+      <textarea id="draft" rows="1" maxlength="2000" placeholder="메시지를 입력해 주세요" aria-label="메시지"></textarea>
+      <button class="send" id="send" type="submit" aria-label="보내기"><svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+    </form>
+  </section>
+  <section class="thread-empty" id="thread-empty"><p>문의를 고르면 대화가 여기에 열려요.</p></section>
+</main>
+<script src="common.js"></script>
+<script src="minimi.js"></script>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.4/dist/umd/supabase.js"></script>
+<script src="auth.js"></script>
+<script src="chat.js"></script>
+</body>
+</html>
