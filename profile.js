@@ -47,8 +47,10 @@
      read:f=>{const v=f.weight.value;if(v==='')return;const kg=parseFloat(v);if(!(kg>=.3&&kg<=100))return '몸무게는 0.3kg에서 100kg 사이로 입력해 주세요.';pet.weight=Math.round(kg*10)/10;pet.size=FP.sizeFromWeight(kg);if(pet.minimi&&!pet.minimiSizeTouched)pet.minimi.size=undefined;}},
     {key:'concerns',optional:true,
      q:p=>`${josa.of(p.name)} 건강 고민을 알려주세요`,
-     hint:p=>`최대 ${Concerns.MAX}개까지 고를 수 있어요.${Concerns.recommended(p).length?' ‘추천’은 나이를 기준으로 많이 살펴보는 항목이고, 진단이 아니에요.':''}`,
-     render:p=>{const rec=Concerns.recommended(p),sel=p.concerns||[];return `<div class="concerns">${Concerns.ordered(p).map(it=>`<label class="concern">${rec.includes(it.id)?'<span class="rec">추천</span>':''}<input type="checkbox" name="concern" value="${it.id}" ${sel.includes(it.id)?'checked':''}>${Concerns.icon(it)}<span>${esc(it.label)}</span></label>`).join('')}</div><p class="concern-count tnum" id="concern-count" aria-live="polite"></p>`;},
+     hint:()=>`최대 ${Concerns.MAX}개까지 고를 수 있어요.`,
+     render:p=>{const why=Concerns.explain(p),rec=why.map(h=>h.id),sel=p.concerns||[],lack=Concerns.missing(p);
+       const panel=why.length?`<section class="rec-why"><h3>${esc(josa.name(p.name))}에게 추천하는 이유</h3><ul>${why.map(h=>`<li><b>${esc(Concerns.labels([h.id])[0])}</b> ${h.reasons.slice(0,2).map(r=>esc(r.why)).join(' ')}</li>`).join('')}</ul><p>연구 통계에서 많이 나타난 항목이고, ${esc(josa.name(p.name))}의 진단이 아니에요.${lack.length?` ${esc(lack.join('·'))} 정보를 입력하면 더 맞춰 드려요.`:''}</p><details class="refs"><summary>참고한 연구</summary><ul>${Concerns.usedSources(why).map(s=>`<li>${esc(s.cite)} <a href="${s.url}" target="_blank" rel="noopener noreferrer">원문</a></li>`).join('')}</ul><p>해외 연구는 국내 반려견과 다를 수 있어요.</p></details></section>`:`<p class="rec-none">나이·몸무게·성별·견종을 입력하면 맞는 항목을 추천해 드려요.</p>`;
+       return `${panel}<div class="concerns">${Concerns.ordered(p).map(it=>`<label class="concern">${rec.includes(it.id)?'<span class="rec">추천</span>':''}<input type="checkbox" name="concern" value="${it.id}" ${sel.includes(it.id)?'checked':''}>${Concerns.icon(it)}<span>${esc(it.label)}</span></label>`).join('')}</div><p class="concern-count tnum" id="concern-count" aria-live="polite"></p>`;},
      bind:()=>{
        const boxes=[...$('#answer').querySelectorAll('input[name=concern]')];
        const count=()=>{$('#concern-count').textContent=`${boxes.filter(b=>b.checked).length} / ${Concerns.MAX}개 선택`;};

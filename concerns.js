@@ -21,15 +21,117 @@
   ];
   const MAX=5;
   const SENIOR_AGE=8;
-  const known=pet=>pet&&pet.years!==''&&pet.years!=null&&!Number.isNaN(Number(pet.years));
-  function recommended(pet){
-    if(!known(pet))return [];
-    return Number(pet.years)>=SENIOR_AGE?['joint','teeth','heart']:['skin','teeth','joint'];
+
+  /* 참고한 연구. 규칙의 src가 이 키를 가리킨다. 해외 연구는 국내 분포와 다를 수 있다. */
+  const SOURCES={
+    park:{cite:'Park JY 외(2026). 국내 27개 동물병원 진료 기록 222,706건의 생애주기별 진단 분석. J Vet Sci 27(1):e5.',url:'https://doi.org/10.4142/jvs.25144'},
+    yi:{cite:'Yi SW 외(2023). 국내 16개 병원 말티즈·미니어처 푸들·시추 진료 기록 40,785건의 연령별 질병 분석. Korean J Vet Res.',url:'https://www.kjvr.org/m/journal/view.php?number=3940'},
+    oneillPerio:{cite:"O'Neill DG 외(2021). 영국 1차 진료 개 22,333마리의 치주 질환 역학. J Small Anim Pract.",url:'https://doi.org/10.1111/jsap.13405'},
+    oneillPatella:{cite:"O'Neill DG 외(2016). 영국 1차 진료 개 210,824마리의 슬개골 탈구 역학. Canine Genet Epidemiol.",url:'https://doi.org/10.1186/s40575-016-0034-0'},
+    mattin:{cite:'Mattin MJ 외(2015). 영국 1차 진료 개의 퇴행성 승모판 질환 유병률과 위험 요인. J Vet Intern Med 29(3).',url:'https://academic.oup.com/jvim/article/29/3/847/8452548'},
+    dapSize:{cite:'Dog Aging Project(2024). 미국 개 27,541마리의 체격·나이별 질환 이력(보호자 보고). PLOS ONE.',url:'https://doi.org/10.1371/journal.pone.0295840'},
+    dapCog:{cite:'Dog Aging Project(2022). 미국 개 15,019마리의 인지 기능 평가. Sci Rep.',url:'https://doi.org/10.1038/s41598-022-15837-9'},
+    anderson:{cite:'Anderson KL 외(2020). 개 골관절염 위험 요인 체계적 문헌 고찰. Front Vet Sci.',url:'https://doi.org/10.3389/fvets.2020.00220'},
+    egenvall:{cite:'Egenvall A 외(2005). 스웨덴 보험 가입 암컷 8만여 마리의 유선 종양 발생. Prev Vet Med.',url:'https://www.sciencedirect.com/science/article/abs/pii/S0167587705000383'},
+    hunprasit:{cite:'Hunprasit V 외(2019). 미국 칼슘옥살레이트 요로 결석 역학. J Vet Intern Med 33(5).',url:'https://academic.oup.com/jvim/article/33/5/2090/8470257'},
+    thomsen:{cite:'Thomsen M 외(2023). 시바견 아토피 피부염 미생물군 연구. Microbiome 11:232.',url:'https://doi.org/10.1186/s40168-023-01671-2'},
+    kent:{cite:'미국 대학 동물병원 골든 리트리버 부검 655건의 암 관련 사망 분석(2018). PLOS ONE.',url:'https://doaj.org/article/b9937efac1d2485d96bf889fae38a43c'}
+  };
+
+  /* 규칙: [항목, 점수, 조건, 이유, 출처]. 점수는 위험도가 아니라 우선순위를 정하는 가중치다(국내 진료 순위와 효과 크기를 참고해 수동 설정, 수의사 검토 필요). 합이 2 이상인 항목 중 상위 3개를 추천한다. */
+  const age=p=>(p&&p.years!==''&&p.years!=null&&!Number.isNaN(Number(p.years)))?Number(p.years):null;
+  const between=(a,b)=>p=>{const y=age(p);return y!==null&&y>=a&&y<=b;};
+  const from=a=>between(a,99);
+  const notPuppy=p=>{const y=age(p);return y===null||y>=2;};
+  const small=p=>p.size==='소형견'||p.size==='중형견';
+  const large=p=>p.size==='대형견';
+  const female=p=>p.sex==='암컷';
+  const male=p=>p.sex==='수컷';
+  const and=(...fs)=>p=>fs.every(f=>f(p));
+  const always=()=>true;
+  const AGE_SIZE_SEX=[
+    ['teeth',3,between(0,1),'1살 이하 국내 진료에서 유치 잔존이 두드러져요','park'],
+    ['ear',2,between(0,5),'외이염은 어릴 때부터 국내 진료 기록에 많이 나와요','park'],
+    ['joint',2,between(0,5),'슬개골 탈구는 어린 나이부터 국내 진료 기록에 많이 나와요','park'],
+    ['skin',3,between(2,5),'2~5살 국내 진료에서 피부 질환이 두드러져요','park'],
+    ['skin',2,between(6,10),'6~10살에도 피부 질환이 국내 진료 기록에 많이 나와요','park'],
+    ['heart',2,between(6,10),'6살 무렵부터 심장 판막 질환이 나타나기 시작해요','park'],
+    ['kidney',2,between(6,10),'6살 무렵부터 방광·신장 결석 기록이 나타나요','park'],
+    ['teeth',1,from(6),'6살 이상은 2~4살보다 치주 질환 기록 가능성이 약 3~4배예요(영국)','oneillPerio'],
+    ['heart',4,from(11),'11살 이상 국내 진료 기록 1위가 심장 판막 질환이에요','park'],
+    ['kidney',4,from(11),'11살 이상 국내 진료에서 만성 콩팥병이 많이 나와요','park'],
+    ['eye',3,from(11),'11살 이상 국내 진료에서 백내장이 많이 나와요','park'],
+    ['cog',2,from(11),'인지 기능 저하 위험은 나이가 한 살 늘 때마다 약 1.5배씩 커져요(미국)','dapCog'],
+    ['teeth',2,and(small,notPuppy),'15kg 미만은 30~40kg 개보다 치주 질환 기록 가능성이 약 2.5~3배예요(영국)','oneillPerio'],
+    ['heart',1,and(small,from(6)),'작은 개일수록 심장 질환 이력이 많아요(미국)','dapSize'],
+    ['eye',1,and(small,from(6)),'작은 개일수록 눈 질환 이력이 많아요(미국)','dapSize'],
+    ['breath',1,and(small,from(6)),'작은 개일수록 호흡기 질환 이력이 많아요(미국)','dapSize'],
+    ['joint',1,and(large,from(6)),'체중이 많이 나갈수록 골관절염 위험이 커져요','anderson'],
+    ['joint',1,and(large,from(6)),'큰 개일수록 나이가 들며 관절 질환 이력이 빠르게 늘어요(미국)','dapSize'],
+    ['lump',2,and(large,from(6)),'큰 개일수록 나이가 들며 암 이력이 빠르게 늘어요(미국)','dapSize'],
+    ['skin',1,and(large,notPuppy),'큰 개일수록 피부 질환 이력이 조금 더 많아요(미국)','dapSize'],
+    ['lump',3,and(female,from(8)),'암컷은 8살까지 약 6%, 10살까지 약 13%에서 유선 종양 청구가 있었어요(스웨덴 보험)','egenvall'],
+    ['heart',1,and(male,from(6)),'수컷은 암컷보다 승모판 질환 진단 가능성이 약 1.4배예요(영국)','mattin'],
+    ['kidney',1,and(male,from(6)),'칼슘옥살레이트 결석 사례의 약 73%가 수컷이에요(미국)','hunprasit']
+  ];
+  const BREEDS=[
+    [/말티즈/,[
+      ['ear',2,always,'국내 말티즈 내원 사유 1위가 외이염이에요(9.9%)','yi'],
+      ['skin',1,always,'국내 말티즈에서 피부 질환 비중이 가장 커요(14.0%)','yi'],
+      ['kidney',1,from(6),'말티즈는 칼슘옥살레이트 결석 고위험 품종이에요(미국)','hunprasit'],
+      ['heart',1,from(9),'국내 9~13살 말티즈에서 심장 질환 기록이 늘어요(5.8%)','yi']]],
+    [/푸들/,[
+      ['teeth',2,always,'토이 푸들은 믹스견보다 치주 질환 기록 가능성이 약 4배예요(영국)','oneillPerio'],
+      ['digest',2,always,'국내 미니어처 푸들에서 소화기 질환 비중이 가장 커요(15.4%)','yi'],
+      ['ear',1,always,'국내 미니어처 푸들 내원 사유 1위가 외이염이에요(9.2%)','yi'],
+      ['heart',1,from(6),'푸들은 믹스견보다 승모판 질환 진단 가능성이 약 2.9배예요(영국)','mattin']]],
+    [/시[추츄]/,[
+      ['skin',2,always,'국내 시추에서 피부 질환 비중이 가장 커요(18.08%)','yi'],
+      ['eye',2,always,'국내 시추에서 눈 질환 비중이 두 번째로 커요(14.0%)','yi'],
+      ['heart',1,from(6),'시추는 믹스견보다 승모판 질환 진단 가능성이 약 2.9배예요(영국)','mattin']]],
+    [/포메/,[
+      ['joint',3,always,'포메라니안은 믹스견보다 슬개골 탈구 가능성이 약 6.5배예요(영국)','oneillPatella'],
+      ['kidney',1,from(6),'포메라니안은 칼슘옥살레이트 결석 고위험 품종이에요(미국)','hunprasit']]],
+    [/비숑/,[
+      ['joint',2,always,'비숑은 믹스견보다 슬개골 탈구 가능성이 약 3배예요(영국)','oneillPatella'],
+      ['kidney',1,from(6),'비숑은 칼슘옥살레이트 결석 고위험 품종이에요(미국)','hunprasit']]],
+    [/치와와/,[
+      ['joint',3,always,'치와와는 믹스견보다 슬개골 탈구 가능성이 약 5.9배예요(영국)','oneillPatella'],
+      ['heart',2,from(6),'치와와는 믹스견보다 승모판 질환 진단 가능성이 약 6.2배예요(영국)','mattin']]],
+    [/요크/,[
+      ['joint',3,always,'요크셔테리어는 믹스견보다 슬개골 탈구 가능성이 약 5.5배예요(영국)','oneillPatella'],
+      ['teeth',2,always,'요크셔테리어는 믹스견보다 치주 질환 기록 가능성이 약 2.2배예요(영국)','oneillPerio'],
+      ['heart',1,from(6),'요크셔테리어는 믹스견보다 승모판 질환 진단 가능성이 약 2.2배예요(영국)','mattin']]],
+    [/카발리에|캐벌리어/,[
+      ['heart',4,from(4),'카발리에는 믹스견보다 승모판 질환 진단 가능성이 약 47배예요(영국)','mattin'],
+      ['teeth',1,always,'카발리에는 믹스견보다 치주 질환 기록 가능성이 약 2.4배예요(영국)','oneillPerio']]],
+    [/시바/,[
+      ['skin',2,always,'시바견은 특히 일본에서 아토피 피부염 사례가 많이 보고됐어요','thomsen']]],
+    [/골든/,[
+      ['lump',3,from(6),'미국 대학병원 부검 자료에서 골든 리트리버 사망의 65%가 암과 관련됐어요','kent']]]
+  ];
+  const TOP=3;
+  /* 조건에 맞는 규칙을 합산해 추천 항목과 이유를 돌려준다. 입력이 없으면 추천하지 않는다. */
+  function explain(pet){
+    pet=pet||{};
+    const rules=[...AGE_SIZE_SEX];
+    BREEDS.forEach(([re,list])=>{if(re.test(pet.breed||''))rules.push(...list);});
+    const hits={};
+    rules.forEach(([id,w,when,why,src])=>{if(!when(pet))return;(hits[id]=hits[id]||{id,score:0,reasons:[]});hits[id].score+=w;hits[id].reasons.push({w,why,src});});
+    const rank=id=>ITEMS.findIndex(i=>i.id===id);
+    return Object.values(hits).filter(h=>h.score>=2).sort((a,b)=>b.score-a.score||rank(a.id)-rank(b.id)).slice(0,TOP).map(h=>({...h,reasons:h.reasons.sort((a,b)=>b.w-a.w)}));
   }
+  function recommended(pet){return explain(pet).map(h=>h.id);}
   function ordered(pet){
     const rec=recommended(pet);
     return [...rec.map(id=>ITEMS.find(i=>i.id===id)),...ITEMS.filter(i=>!rec.includes(i.id))];
   }
   function labels(ids){return (ids||[]).map(id=>(ITEMS.find(i=>i.id===id)||{}).label).filter(Boolean);}
-  window.Concerns={ITEMS,MAX,SENIOR_AGE,recommended,ordered,labels,icon:it=>`<svg viewBox="0 0 48 48" aria-hidden="true">${it.art}</svg>`};
+  /* 추천을 더 맞추려면 필요한 입력 */
+  function missing(pet){
+    pet=pet||{};
+    return [age(pet)===null?'나이':'',pet.size?'':'몸무게',pet.sex?'':'성별',pet.breed?'':'견종'].filter(Boolean);
+  }
+  function usedSources(list){return [...new Set(list.flatMap(h=>h.reasons.map(r=>r.src)))].map(k=>SOURCES[k]);}
+  window.Concerns={ITEMS,MAX,SENIOR_AGE,SOURCES,explain,recommended,ordered,labels,missing,usedSources,icon:it=>`<svg viewBox="0 0 48 48" aria-hidden="true">${it.art}</svg>`};
 })();
