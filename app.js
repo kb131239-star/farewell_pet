@@ -143,7 +143,7 @@
     const cfg=FILTERS[current], f=filterState[current], r=evaluate(current,f);lastResults=r;
     $('#results-title').textContent=`${cfg.title} ${r.shown.length}곳`;
     const labels=[f.region+' · '+DIST[f.dist-1]+'까지',...r.reqs.map(q=>q.replace('size:',''))];
-    $('#applied').innerHTML=`<div class="applied-row">${labels.map(l=>`<span>${esc(l)}</span>`).join('')}</div><button type="button" class="btn-ghost" id="refilter">${icon('edit')}필터 다시 고르기</button>`;
+    $('#applied').innerHTML=`<div class="applied-row">${labels.map(l=>`<span>${esc(l)}</span>`).join('')}</div><button type="button" class="btn-ghost" id="results-mode" aria-pressed="false">${icon('map')}지도로 보기</button><button type="button" class="btn-ghost" id="refilter">${icon('edit')}필터 다시 고르기</button>`;
     $('#refilter').onclick=back2filter;
     const groups=[['ok','조건에 맞아요'],['unknown','확인이 필요해요'],['none','둘러보기'],['no','조건이 맞지 않아요']];
     let html='';
@@ -154,7 +154,22 @@
       if(r.hiddenByDist)html+=`<p class="note center">${r.hiddenByDist}곳은 더 먼 동네에 있어요. 거리를 넓히면 함께 보여요.</p>`;
       if(r.shown.some(x=>x.p.example))html+=`<p class="note center">‘예시’ 표시가 있는 곳은 화면 설명을 위한 가상의 업체예요.</p>`;
     }
-    $('#results-body').innerHTML=html;
+    $('#results-body').innerHTML=`<div id="results-list">${html}</div><div id="results-map-wrap" hidden><div class="kmap kmap-tall" id="results-map">지도를 불러오는 중이에요.</div><p class="note center" id="results-map-note"></p></div>`;
+    const real=r.shown.map(x=>x.p).filter(x=>!x.example);
+    let mapDrawn=false;
+    $('#results-mode').hidden=!real.length;
+    $('#results-mode').onclick=async e=>{
+      const btn=e.currentTarget,on=btn.getAttribute('aria-pressed')!=='true';
+      btn.setAttribute('aria-pressed',on);
+      btn.innerHTML=on?`${icon('list')}목록으로 보기`:`${icon('map')}지도로 보기`;
+      $('#results-list').hidden=on;$('#results-map-wrap').hidden=!on;
+      if(on&&!mapDrawn){
+        mapDrawn=true;
+        const res=await KMap.showMany($('#results-map'),real,openDetail);
+        const note=$('#results-map-note');
+        if(note)note.textContent=`핀을 누르면 업체 이름이 보여요.${res.missing?` ${res.missing}곳은 위치를 찾지 못해 목록에서만 보여요.`:''}`;
+      }
+    };
     const w=$('#widen');if(w)w.onclick=back2filter;
     if(!$('#results').open)$('#results').showModal();
     $('#results-body').scrollTop=0;
@@ -189,7 +204,7 @@
       ${facilities.length?`<section class="d-sec"><h3>돌봄 시설</h3><div class="facil">${facilities.map(a=>`<span>${icon(FACILITY_ICONS[a])}${esc(a)}</span>`).join('')}</div></section>`:''}
       ${amen.length?`<section class="d-sec"><h3>편의 시설</h3><div class="facil row">${amen.map(a=>`<span>${icon(FACILITY_ICONS[a])}${esc(a)}</span>`).join('')}</div></section>`:''}
       ${unknown.length||p.cat==='hospital'?`<section class="d-sec"><h3>아직 확인되지 않은 정보</h3><p class="muted">${p.cat==='hospital'?'진료 항목, 야간·응급 진료, 노령견 진료 여부는 아직 확인되지 않았어요. 방문 전에 전화로 확인해 주세요.':esc(unknown.join(', '))+'은(는) 업체에 문의해 확인해 주세요.'}</p></section>`:''}
-      <section class="d-sec"><h3>위치</h3><p class="line">${icon('pin')}<span>${esc(p.address)}</span>${p.example?'':`<button type="button" class="icon-btn small" id="copy-addr" aria-label="주소 복사">${icon('copy')}</button>`}</p>${p.example?'':`<a class="map-link" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name+' '+p.address)}" target="_blank" rel="noopener noreferrer">지도에서 보기 ${icon('external')}</a>`}</section>
+      <section class="d-sec"><h3>위치</h3><p class="line">${icon('pin')}<span>${esc(p.address)}</span>${p.example?'':`<button type="button" class="icon-btn small" id="copy-addr" aria-label="주소 복사">${icon('copy')}</button>`}</p>${p.example?'':`<div class="kmap" id="detail-map" role="img" aria-label="${esc(p.name)} 위치 지도">지도를 불러오는 중이에요.</div><a class="btn btn-soft route-btn" id="route" href="${KMap.routeUrl(p)}" target="_blank" rel="noopener noreferrer">${icon('map')}카카오맵으로 길찾기</a><p class="note">주소를 기준으로 표시한 위치예요. 방문 전에 입구를 한 번 더 확인해 주세요.</p>`}</section>
       ${p.source?`<p class="source">정보 확인일 ${esc(p.checked)} · <a href="${p.source}" target="_blank" rel="noopener noreferrer">${esc(p.sourceLabel)} ${icon('external')}</a></p>`:p.checked?`<p class="source">정보 확인일 ${esc(p.checked)} · 출처: ${esc(p.sourceLabel||'')}</p>`:''}`;
     const price=p.prices?`${p.example?'<p class="note">예시 요금이에요. 실제 업체 요금이 아니에요.</p>':p.priceNote?`<p class="note">${esc(p.priceNote)}</p>`:''}${p.prices.map(([g,rows])=>`<section class="price"><h3>${esc(g)}</h3><dl>${rows.map(([k,val])=>`<div><dt>${esc(k)}</dt><dd class="tnum">${esc(val)}</dd></div>`).join('')}</dl></section>`).join('')}`:(p.cat==='hospital'?`<div class="empty small"><b>진료비는 병원마다 달라요</b><p>같은 진료라도 병원별 차이가 커요. 방문 전에 예상 비용을 꼭 물어보세요.</p></div>`:`<div class="empty small"><b>요금은 아직 확인 전이에요</b><p>미용 종류와 아이의 체중·털 상태에 따라 달라져요. 예약할 때 예상 요금을 물어보세요.</p></div>`);
     const reviews=`<div class="empty small">${icon('chat')}<b>아직 연결된 후기가 없어요</b><p>블로그 후기 연결은 준비 중이에요. 다녀온 뒤 산책 일기에 남겨 두면 다음 선택에 도움이 돼요.</p><button type="button" class="btn btn-soft" id="review-record">산책 일기 쓰기</button></div>`;
@@ -210,6 +225,8 @@
     heartState();
     if(!$('#detail').open)$('#detail').showModal();
     $('#detail-body').scrollTop=0;
+    const dm=$('#detail-map');
+    if(dm)KMap.showOne(dm,p,pos=>{const r=$('#route');if(r)r.href=KMap.routeUrl(p,pos);});
   }
   function heartState(){const on=detailPlace&&state.saved.includes(detailPlace.id);$('#detail-heart').setAttribute('aria-pressed',on);$('#detail-heart').setAttribute('aria-label',on?'찜 해제':'찜하기');}
   $('#detail-heart').addEventListener('click',()=>toggleSave(detailPlace.id));
