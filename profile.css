@@ -79,6 +79,10 @@ body.wizard{min-height:100dvh;background:var(--meadow)}
 .color-pick{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:6px 16px;border-radius:16px;background:var(--soil-pale);border:2px solid var(--soil-edge);font-size:14.5px;font-weight:700;color:var(--soil-edge);cursor:pointer}
 .color-pick input{flex:none;width:64px;height:44px;padding:2px;border:2px solid #3A2B20;border-radius:12px;background:#fff;cursor:pointer}
 
+/* 견종 선택: 칸 너비를 같게 맞추고 긴 이름은 가운데 정렬로 줄바꿈 */
+.answer .chips.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.answer .chips.grid3 .chip{padding:6px;line-height:1.25;text-align:center;font-size:14.5px;word-break:keep-all}
+
 /* 건강 고민 */
 .rec-why{margin-bottom:18px;padding:16px 18px;border-radius:18px;background:#fff;border:1.5px solid var(--line)}
 .rec-why h3{margin:0 0 10px;font-size:15.5px;color:var(--forest)}

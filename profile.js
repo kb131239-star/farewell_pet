@@ -4,7 +4,7 @@
   const pet={breed:'',years:'',months:'',sex:'',dogs:'',people:'',separation:'',weight:'',concerns:[],hasMedication:'',medications:[],photo:'',...state.pet};
   const form=document.querySelector('#wizard');
   const $=s=>document.querySelector(s);
-  const BREEDS=['믹스견','말티즈','푸들','포메라니안','시추','치와와','요크셔테리어','비숑프리제','스피츠','닥스훈트','코카스패니얼','프렌치불독','퍼그','미니어처 슈나우저','카발리에','웰시코기','비글','시바견','진돗개','보더콜리','사모예드','골든리트리버','래브라도리트리버','저먼셰퍼드','기타'];
+  const BREEDS=['믹스견','말티즈','푸들','포메라니안','시추','치와와','요크셔테리어','비숑프리제','스피츠','닥스훈트','코카스패니얼','프렌치불독','퍼그','미니어처 슈나우저','카발리에','웰시코기','비글','시바견','진돗개','보더콜리','사모예드','골든리트리버','래브라도 리트리버','저먼셰퍼드','기타'];
   const radio=(name,values,selected)=>values.map(v=>`<label class="chip"><input type="radio" name="${name}" value="${esc(v)}" ${v===selected?'checked':''}>${esc(v)}</label>`).join('');
 
   function persist(){state.pet=pet;if(!FP.save(state))FP.toast('저장 공간을 쓸 수 없어 이 화면에서만 유지돼요.');}
