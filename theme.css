@@ -11,11 +11,11 @@
   --grass:#78AE52;
   --grass-deep:#1E56C2;
   --forest:#13305F;
-  --soil:#F2B705;
+  --soil:#FFD400;
   --soil-edge:#8A6400;
   --soil-light:#F7D46A;
   --soil-pale:#FFF5D1;
-  --sun:#F2B705;
+  --sun:#FFD400;
   --sun-deep:#D99A00;
   --petal:#F5A9BC;
   --ink:#1A2233;
@@ -61,7 +61,7 @@ input,textarea{caret-color:var(--primary)}
 .btn-ghost{border:0;display:inline-flex;align-items:center;gap:6px;border-radius:10px;background:none;color:var(--ink-3);font-weight:600;min-height:44px;padding:0 10px}
 .btn-ghost:hover{color:var(--ink)}
 .btn-sun{background:var(--sun);color:#3B2C00}
-.btn-sun:hover{background:#FFCF45}
+.btn-sun:hover{background:#F5CB00}
 .icon-btn{display:inline-grid;place-items:center;width:44px;height:44px;border-radius:12px;border:0;background:none;color:var(--ink-2)}
 .icon-btn:hover{background:rgba(19,48,95,.06)}
 

@@ -2,7 +2,7 @@
 (function(){
   const {esc,icon,josa,toast}=FP;
   const MOODS={great:'신났어요',ok:'괜찮았어요',hard:'힘들어했어요'};
-  const CAT={hospital:['병원','#1E56C2'],hotel:['호텔','#F2B705'],care:['호텔','#F2B705'],kindergarten:['유치원','#3E9B6F'],grooming:['미용','#E0738A'],etc:['기타','#8A93A3']};
+  const CAT={hospital:['병원','#1E56C2'],hotel:['호텔','#FFD400'],care:['호텔','#FFD400'],kindergarten:['유치원','#3E9B6F'],grooming:['미용','#E0738A'],etc:['기타','#8A93A3']};
   const TODOS=['투약 시간 다시 알려 주기','단독 돌봄 요청하기','좋아하는 담요 챙기기','다음 예약 잡기','사료 챙겨 보내기'];
   const WEEK=['일','월','화','수','목','금','토'];
   let ctx, month, selected=null;
