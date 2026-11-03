@@ -2,8 +2,8 @@
 body.app{min-height:100dvh;background:var(--meadow)}
 .app-top{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.2) blur(10px);-webkit-backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid rgba(207,216,196,.7)}
 .tabbar{display:flex;gap:4px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:4px}
-.tabbar button{display:inline-flex;align-items:center;gap:7px;border:0;background:none;border-radius:10px;min-height:40px;padding:0 14px;font-weight:700;font-size:15px;color:var(--ink-3)}
-.tabbar button:hover{color:var(--ink)}
+.tabbar button,.tabbar a{display:inline-flex;align-items:center;gap:7px;border:0;background:none;border-radius:10px;min-height:40px;padding:0 14px;font-weight:700;font-size:15px;color:var(--ink-3)}
+.tabbar button:hover,.tabbar a:hover{color:var(--ink)}
 .tabbar button[aria-current=page]{background:var(--primary);color:#fff}
 .tabbar .i{width:18px;height:18px}
 .badge{font-size:11px;line-height:1;padding:3px 6px;border-radius:8px;background:var(--sun);color:#3B2C00}
@@ -171,7 +171,7 @@ main{max-width:1280px;margin:0 auto}
   .me-name{display:none}
   .me{padding:3px}
   .tabbar{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:6;justify-content:space-around;border-radius:20px;padding:6px;box-shadow:0 10px 30px -8px rgba(29,39,30,.35)}
-  .tabbar button{flex:1;flex-direction:column;gap:2px;min-height:52px;font-size:12px;padding:0 4px;position:relative}
+  .tabbar button,.tabbar a{flex:1;flex-direction:column;gap:2px;min-height:52px;font-size:12px;padding:0 4px;position:relative}
   .tabbar .badge{position:absolute;top:4px;right:calc(50% - 22px)}
   .view-map{min-height:calc(100dvh - 60px);padding-bottom:84px}
   .map-head{padding-top:16px}
@@ -267,3 +267,4 @@ main{max-width:1280px;margin:0 auto}
 .diary-sec .tx{color:var(--ink-2)}
 @media (max-width:760px){.page-body{flex-wrap:wrap}.polaroid{width:110px}.cal-sync{flex-direction:column;align-items:flex-start}.cal{padding:10px 8px 12px}.cal-day .n{font-size:13px}}
 @media (max-width:760px){#toast{bottom:calc(100px + env(safe-area-inset-bottom))}}
+.tabbar a{text-decoration:none;color:var(--ink-3)}

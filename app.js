@@ -238,10 +238,35 @@
     lines.push('','감사합니다.');
     return lines.join('\n');
   }
-  function inquiry(p){
-    modal('간편 돌봄문의',`<p class="muted">${esc(p.name)}에 보낼 문의를 ${esc(josa.of(petName))} 프로필로 미리 채웠어요. 업체로 바로 전송되지는 않아요. 복사해서 문자나 메시지로 보내 주세요.</p><label class="field-l">희망 날짜<input type="date" name="date" id="ask-date"></label><label class="field-l">문의 내용<textarea name="memo" id="ask-memo" rows="9" maxlength="1200"></textarea></label>`,`<button type="submit" form="modal-form" class="btn btn-primary">${icon('copy')}문의 내용 복사하기</button>`,fd=>copy(fd.get('memo'),'문의 내용을 복사했어요.',true));
+  async function inquiry(p){
+    const chat=window.FPChat, open=chat?await chat.isAccepting(p.id):false;
+    const fields=`<label class="field-l">희망 날짜<input type="date" name="date" id="ask-date"></label><label class="field-l">문의 내용<textarea name="memo" id="ask-memo" rows="9" maxlength="2000" required></textarea></label>`;
+    if(open)modal('간편 돌봄문의',`<p class="muted">${esc(p.name)}에 보낼 문의를 ${esc(josa.of(petName))} 프로필로 미리 채웠어요. 보내면 아래 내용이 그대로 업체에 전달돼요. 건강이나 약 정보는 원하는 만큼만 남겨 주세요.</p>${fields}`,`<button type="submit" form="modal-form" class="btn btn-primary" id="ask-send">${icon('chat')}문의 보내기</button>`,fd=>sendAsk(p,fd.get('memo')));
+    else modal('간편 돌봄문의',`<p class="muted">${esc(p.name)}에 보낼 문의를 ${esc(josa.of(petName))} 프로필로 미리 채웠어요. 이곳은 아직 앱으로 문의를 받지 않아요. 복사해서 문자나 메시지로 보내 주세요.</p>${fields}`,`<button type="submit" form="modal-form" class="btn btn-primary">${icon('copy')}문의 내용 복사하기</button>`,fd=>copy(fd.get('memo'),'문의 내용을 복사했어요.',true));
     const fill=()=>{$('#ask-memo').value=inquiryText(p,$('#ask-date').value?$('#ask-date').value.replace(/-/g,'.'):'');};
     $('#ask-date').addEventListener('change',fill);fill();
+  }
+  async function sendAsk(p,memo){
+    const chat=window.FPChat, body=String(memo||'').trim();
+    if(!body)return;
+    const btn=$('#ask-send');if(btn)btn.disabled=true;
+    const inquiry={facilityId:p.id,petName,body};
+    try{
+      if(!await chat.currentUser()){chat.savePending(inquiry);askLogin();return;}
+      const id=await chat.sendInquiry(inquiry);
+      location.href='inbox.html?c='+encodeURIComponent(id);
+    }catch{
+      if(btn)btn.disabled=false;
+      toast('문의를 보내지 못했어요. 잠시 뒤에 다시 시도해 주세요.');
+    }
+  }
+  function askLogin(){
+    modal('이메일로 로그인',`<p class="muted">업체 답변을 받으려면 로그인이 필요해요. 메일로 받은 링크를 이 브라우저에서 열면 작성한 문의가 바로 전달돼요.</p><label class="field-l">이메일<input type="email" name="email" required autocomplete="email" inputmode="email" placeholder="name@example.com"></label><p class="muted" id="ask-login-error" role="alert" hidden></p>`,`<button type="submit" form="modal-form" class="btn btn-primary" id="ask-login">로그인 링크 받기</button>`,async fd=>{
+      const btn=$('#ask-login'),email=String(fd.get('email')).trim();btn.disabled=true;
+      const error=await window.FPChat.signIn(email,'inbox.html');
+      if(error){const el=$('#ask-login-error');el.textContent=window.FPChat.loginErrorText(error);el.hidden=false;btn.disabled=false;return;}
+      modal('메일을 확인해 주세요',`<p class="muted">${esc(email)}로 로그인 링크를 보냈어요. 링크를 열면 작성한 문의가 전달되고 문의함으로 이동해요.</p>`,`<button type="button" class="btn btn-primary" data-close>닫기</button>`);
+    });
   }
   async function copy(text,msg,close){try{await navigator.clipboard.writeText(text);toast(msg);if(close)$('#modal').close();}catch{toast('복사하지 못했어요. 내용을 길게 눌러 직접 복사해 주세요.');}}
   function openSoon(id){

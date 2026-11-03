@@ -3,7 +3,13 @@
    - 호텔·돌봄·유치원·미용은 화면 설명용 예시 업체다. 이름·요금·조건 모두 예시이며 화면에 '예시'로 표시한다. */
 (function(){
   const T=true,F=false;
-  const examples=[];
+  /* 문의 채팅 시연용 가상 업체. Supabase facilities의 test-care와 짝을 이룬다. */
+  const examples=[
+    {id:'test-care',name:'farewell 테스트 돌봄',kindLabel:'문의 채팅 테스트',cat:'hotel',kinds:['hotel','kinder'],region:'나주시',dist:1,example:true,
+     address:'테스트용 가상 주소',phone:null,hours:null,
+     description:'문의 채팅을 시험해 보는 가상의 업체예요. 실제로 돌봄을 제공하지 않아요.',
+     sizes:{},attrs:{},prices:null}
+  ];
 
 
   /* 미용실: 보호자가 공유한 Google 비즈니스 프로필과 업체 SNS·지역 프로필에서 확인한 정보 (2026.11.01 확인).

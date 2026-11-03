@@ -1,0 +1,54 @@
+/* Supabase 연결과 문의 전송. 아래 키는 브라우저 공개용(anon)이고, 데이터 보호는 RLS가 맡는다. */
+(function(){
+  const URL_='https://wowiqauwcxmhrgpltqey.supabase.co';
+  const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indvd2lxYXV3Y3htaHJncGx0cWV5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM2OTg3MDcsImV4cCI6MjEwOTI3NDcwN30.KXJNAShiQX7ShaWNu55Vk253w-zv2i8sp25NOkBT3WE';
+  const PENDING='farewell-pet-pending-inquiry';
+  if(!window.supabase||!window.supabase.createClient)return;
+  const client=window.supabase.createClient(URL_,KEY);
+
+  async function currentUser(){const {data}=await client.auth.getSession();return data.session?data.session.user:null;}
+  async function signIn(email,page){
+    const {error}=await client.auth.signInWithOtp({email,options:{emailRedirectTo:new URL(page,location.href).href}});
+    return error||null;
+  }
+  function loginErrorText(error){
+    const c=error&&(error.code||'');
+    if(c==='email_address_not_authorized')return '지금은 시범 운영 중이라 등록된 이메일로만 로그인할 수 있어요.';
+    if(c==='over_email_send_rate_limit'||c==='over_request_rate_limit'||(error&&error.status===429))return '메일을 너무 자주 요청했어요. 잠시 뒤에 다시 시도해 주세요.';
+    if(c==='validation_failed'||c==='email_address_invalid')return '이메일 주소를 다시 확인해 주세요.';
+    return '메일을 보내지 못했어요. 잠시 뒤에 다시 시도해 주세요.';
+  }
+
+  let acceptingCache=null;
+  function accepting(){
+    if(!acceptingCache)acceptingCache=client.from('facilities').select('id').eq('accepting_inquiries',true)
+      .then(({data,error})=>{if(error)throw error;return new Set(data.map(f=>f.id));})
+      .catch(()=>{acceptingCache=null;return new Set();});
+    return acceptingCache;
+  }
+  /* 네트워크가 느려도 문의 버튼이 멈추지 않게, 4초 안에 모르면 복사 방식으로 넘어간다 */
+  function isAccepting(id){
+    return Promise.race([accepting().then(s=>s.has(id)),new Promise(r=>setTimeout(()=>r(false),4000))]);
+  }
+
+  async function sendInquiry({facilityId,petName,body}){
+    const user=await currentUser();if(!user)throw new Error('not_signed_in');
+    const find=()=>client.from('conversations').select('id').eq('facility_id',facilityId).eq('guardian_id',user.id).maybeSingle();
+    let {data:conv,error}=await find();
+    if(error)throw error;
+    if(!conv){
+      const res=await client.from('conversations').insert({facility_id:facilityId,pet_name:String(petName||'우리 아이').slice(0,40)}).select('id').single();
+      if(res.error&&res.error.code==='23505'){const again=await find();if(again.error)throw again.error;conv=again.data;}
+      else if(res.error)throw res.error;
+      else conv=res.data;
+    }
+    const sent=await client.from('messages').insert({conversation_id:conv.id,sender_role:'guardian',body});
+    if(sent.error)throw sent.error;
+    return conv.id;
+  }
+
+  function savePending(p){try{localStorage.setItem(PENDING,JSON.stringify(p));return true;}catch{return false;}}
+  function takePending(){try{const v=localStorage.getItem(PENDING);localStorage.removeItem(PENDING);return v?JSON.parse(v):null;}catch{return null;}}
+
+  window.FPChat={client,currentUser,signIn,loginErrorText,isAccepting,sendInquiry,savePending,takePending};
+})();
