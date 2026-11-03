@@ -126,13 +126,17 @@ dialog.sheet.full{height:92dvh}
 /* 산책 지도 */
 .trails,.deco,.hub,.walker{pointer-events:none}
 .trailmap{display:block;overflow:visible;-webkit-user-select:none;user-select:none}
-.t-edge,.t-soil{fill:none;stroke-linecap:round;stroke-dasharray:1 1;stroke-dashoffset:1;transition:stroke-dashoffset 1.15s cubic-bezier(.65,0,.35,1),stroke .25s}
-.t-edge{stroke:#8C5F36}
-.t-soil{stroke:#C49866}
-.t-pebble{fill:none;stroke:#EED9B6;stroke-linecap:round;stroke-dasharray:1.2 13;opacity:0;transition:opacity .5s .9s}
-.trail.on .t-edge,.trail.on .t-soil{stroke-dashoffset:0}
-.trail.on .t-pebble{opacity:.95}
-.trail.hl .t-soil{stroke:#D7AB74}
+.t-soil{fill:none;stroke:none}
+.t-reveal{fill:none;stroke:#fff;stroke-linecap:butt;stroke-dasharray:1 1.1;stroke-dashoffset:1.05;transition:stroke-dashoffset 1.15s cubic-bezier(.65,0,.35,1)}
+.t-edge{fill:#D3B88D}
+.t-body{fill:#E4CDA6;transition:fill .25s}
+.t-worn{fill:#DAC198;transition:fill .25s}
+.t-paws{opacity:0;transition:opacity .5s .9s}
+.trail.on .t-reveal{stroke-dashoffset:0}
+.trail.on .t-paws{opacity:.5}
+.trail.hl .t-body{fill:#F0DBB5}
+.trail.hl .t-worn{fill:#E6CEA3}
+.trail.hl .t-paws{opacity:.8}
 .node{cursor:pointer;outline:none}
 .node .lift{opacity:0;transform:translateY(12px) scale(.86);transform-box:fill-box;transform-origin:50% 100%;transition:opacity .45s,transform .55s cubic-bezier(.34,1.56,.64,1)}
 .node.on .lift{opacity:1;transform:none}
